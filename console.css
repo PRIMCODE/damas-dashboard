@@ -111,7 +111,13 @@ body {
     display: none;
 }
 
-table.log tr.history td {
+table.search th {
+	cursor: pointer;
+}
+
+table.log tr.history td,
+table.search tr.history td
+{
 	opacity: .5;
 }
 table.log tr.history.clicked td {
@@ -121,8 +127,10 @@ table.log th.comment {
 	text-align: left;
 }
 table.log    td.time,
+table.users  td.time,
 table.search td.time {
 	white-space: nowrap;
+	text-align: center;
 }
 table.log    td.file,
 table.search td.file {

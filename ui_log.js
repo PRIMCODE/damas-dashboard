@@ -35,7 +35,7 @@
 	var scrollElem = document.getElementById('panelPrincipal');
 
 	scrollElem.addEventListener('scroll', function(){
-		if (/#log/.test(location.hash)) {
+		if (/#log/.test(location.hash) || location.hash==='') {
 			if (this.scrollHeight - this.scrollTop === this.clientHeight) {
 				damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
 				//damas.search_mongo({'time': {$exists:true, $type: 1}}, {"time":-1},nbElements,offsetElements, function(res){
