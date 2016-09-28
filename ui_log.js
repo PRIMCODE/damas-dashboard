@@ -158,7 +158,7 @@ function tableLogTr(asset, noclickontimebool) {
 			td2.innerHTML = human_filename_txt(file);
 		}
 	} 
-	td3.innerHTML = human_size( asset.bytes || asset.size || asset.source_size);
+	td3.innerHTML = human_size( asset.file_size || asset.bytes || asset.size || asset.source_size);
 	td3.setAttribute('title', asset.bytes || asset.size || asset.source_size);
 	td4.innerHTML = '&lt;'+asset.author+'&gt; '+asset.comment;
 	tr.appendChild(td1);
