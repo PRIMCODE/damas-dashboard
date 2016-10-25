@@ -25,6 +25,11 @@ window.addEventListener("hashchange", function() {
     process_hash();
 });
 
+window.addEventListener('damasapi:error', function(e){
+	alert(e.detail.text);
+});
+
+
 process_hash = function() {
 	//if(/#graph=/.test(location.hash))
 	var keys = getHash();
