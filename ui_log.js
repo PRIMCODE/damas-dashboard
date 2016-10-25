@@ -210,6 +210,7 @@ function tableLogTr(asset, noclickontimebool) {
 	return tr;
 }
 
+/*
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) { // AMD
         define(['../socket.io/socket.io'], factory);
@@ -272,3 +273,4 @@ function tableLogTr(asset, noclickontimebool) {
 
     return socket;
 }));
+*/

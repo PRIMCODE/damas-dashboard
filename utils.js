@@ -99,6 +99,7 @@ human_size = function ( filesize )
 // dd/mm/yy hh:mm:ss
 human_time = function ( time )
 {
+	if(time['getDate'] === undefined) return '??/??/?? ??:??:??';
     return ('00'+time.getDate()).slice(-2)+'/'+('00'+(time.getMonth()+1)).slice(-2)+'/'+('00'+(time.getYear())).slice(-2)+' '+('00'+time.getHours()).slice(-2)+':'+('00'+time.getMinutes()).slice(-2)+':'+('00'+time.getSeconds()).slice(-2);
 }
 

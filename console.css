@@ -148,6 +148,10 @@ table.log td.comment {
 table.users .userclass {
 	text-align: center;
 }
+table.log td.sync,
+table.search td.sync {
+	text-align: center;
+}
 table.log td.buttons,
 table.search td.buttons {
 	text-align: right;

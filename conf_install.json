@@ -1,4 +1,5 @@
 {
 	"workdirs": ["file:///D:\\WORK"],
-	"pathKey":"_id"
+	"pathKey":"_id",
+	"syncKeys": ["synced_online", "synced_server1", "synced_server2"]
 }
