@@ -39,6 +39,9 @@ body {
 	transition-duration: .1s;
 }
 */
+#contents table tr:nth-child(even) {
+	background : rgba(128,128,128,.05);
+}
 #contents table tr:hover {
 	background : rgba(128,128,128,.1);
 	background-opacity:.1;
@@ -47,6 +50,9 @@ body {
 	font-weight: bold;
 */
 }
+
+
+
 /*
 #contents table tr:hover {
 	box-shadow: 0px -4px 2px -2px #888 inset;
