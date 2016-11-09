@@ -1,7 +1,7 @@
 
     require(['domReady'], function (domReady) {
         domReady(function () {
-            //loadBtUpload(); 
+            //loadBtUpload();
         });
     });
 
@@ -11,21 +11,23 @@
 			tableBody = document.querySelector('#contents tbody');
 		}
 
-	/**
-	* Generate Log Table
-	* 
-	*/
 	var ui_log = {
 	};
 		nbElements = 100;
 		offsetElements = 0;
 
+
+var retrieved_assets = [];
+
+
 	compLog = function(container){
 		container.innerHTML = '';
 		var tableBody = tableLog(container);
-		damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
+		//damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
+		damas.search_mongo({'time': {$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
 		//damas.search_mongo({'time': {$exists:true, $type: 1}}, {"time":-1},nbElements,offsetElements, function(res){
-			damas.read(res, function(assets){ 
+			damas.read(res.ids, function(assets){
+				retrieved_assets = retrieved_assets.concat(assets);
 				tableLogContent(tableBody, assets);
 					offsetElements += nbElements;
 			});
@@ -37,9 +39,12 @@
 	scrollElem.addEventListener('scroll', function(){
 		if (/#log/.test(location.hash) || location.hash==='') {
 			if (this.scrollHeight - this.scrollTop === this.clientHeight) {
-				damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
+				//damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
+				damas.search_mongo({'time': {$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
 				//damas.search_mongo({'time': {$exists:true, $type: 1}}, {"time":-1},nbElements,offsetElements, function(res){
-					damas.read(res, function(assets){
+					damas.read(res.ids, function(assets){
+						retrieved_assets = retrieved_assets.concat(assets);
+						//alert(retrieved_assets.length);
 						tableLogContent(tableBody, assets);
 						offsetElements += nbElements;
 					});
@@ -50,13 +55,13 @@
 
 	function getChildrenLog( id, clickedChild, out ){
 		damas.search_mongo({'#parent': id }, {"time":1},100, 0, function(res){
-			damas.read(res, function(children){
+			damas.read(res.ids, function(children){
 				var td_time = out.querySelector('td.time');
 				var td_file = out.querySelector('td.file');
 				var td_size = out.querySelector('td.file');
 				for(var i=0; i< children.length; i++){
 					var n =  children[i];
-					var tr = tableLogTr(n, true);
+					var tr = tr(n, true);
 					tr.classList.add('history');
 					if (n._id === clickedChild) {
 						out.style.display= 'none';
@@ -98,14 +103,14 @@ function tableLog(container) {
 
 	table.classList.add('log');
 	th1.classList.add('time');
-	th2.classList.add('file');
-	th3.classList.add('size');
-	th4.classList.add('comment');
+	th3.classList.add('file');
+	th4.classList.add('size');
+	th2.classList.add('comment');
 	
 	th1.innerHTML = 'time &xutri;';
-	th2.innerHTML = 'file';
-	th3.innerHTML = 'size';
-	th4.innerHTML = 'comment';
+	th3.innerHTML = 'file';
+	th4.innerHTML = 'size';
+	th2.innerHTML = 'comment';
 
 	thead.appendChild(th1);
 	thead.appendChild(th2);
@@ -119,56 +124,122 @@ function tableLog(container) {
 }
 
 /**
-* Generate Table Content
-* 
-*/
+ * Generate Table Content
+ *
+ */
 function tableLogContent(container, assets) {
+/*
 	for (var i=0; i<assets.length; i++) {
-		container.appendChild(tableLogTr(assets[i]));
+		container.appendChild(tr(assets[i]));
 	}
+*/
+            var last_tr = null;
+            for (var i=0; i<assets.length; i++) {
+                if (i > 0){
+                    if (assets[i].comment === assets[i-1].comment) {
+                        fill_tr(assets[i], last_tr);
+                    }
+                    else {
+                        last_tr = tr(assets[i]);
+                        container.appendChild(last_tr);
+                    }
+                    continue;
+                }
+                last_tr = tr(assets[i]);
+                container.appendChild(last_tr);
+            }
 }
+
+        function fill_tr(asset, tr) {
+            var td1 = tr.querySelector('td.time');
+            var td3 = tr.querySelector('td.file');
+            var td4 = tr.querySelector('td.size');
+            var td2 = tr.querySelector('td.comment');
+            var td5 = tr.querySelector('td.buttons');
+	var td1div0 = document.createElement('div');
+			td1div0.innerHTML = human_time(new Date(parseInt(asset.time)));
+	td1.appendChild(td1div0);
+
+	var td3div0 = document.createElement('div');
+	var file = asset.file || asset['#parent'] || asset._id;
+	if (file) {
+		// here we want to know if we are in the zombillenium case or in the white fang case
+		if ( (asset['#parent'] && !asset.file) || ( asset.synced_online && asset.synced_online > asset.time )) {
+			td3div0.appendChild(human_filename_href(file));
+		}
+		else {
+			td3div0.innerHTML = human_filename_txt(file);
+		}
+	}
+	td3div0.setAttribute('title', JSON_tooltip(asset));
+	//td3.insertBefore(td3div0, td3.firstChild);
+	td3.appendChild(td3div0);
+
+
+
+	var td4div0 = document.createElement('div');
+	td4div0.innerHTML = human_size( asset.file_size || asset.bytes || asset.size || asset.source_size);
+	td4div0.setAttribute('title', asset.bytes || asset.size || asset.source_size);
+	//td4.insertBefore(td4div0, td4.firstChild);
+	td4.appendChild(td4div0);
+
+	if (require.specified('ui_editor')) {
+		td4div0.addEventListener('click', function(){
+			initEditor(asset);
+		});
+	}
+
+
+        }
+
+
 
 /*
  * noclickontimebool is an optional boolean
  */
-function tableLogTr(asset, noclickontimebool) {
+function tr(asset, noclickontimebool) {
 	var tr = document.createElement('tr');
 	var td1 = document.createElement('td');
-	var td2 = document.createElement('td');
 	var td3 = document.createElement('td');
 	var td4 = document.createElement('td');
+	var td2 = document.createElement('td');
 	var td5 = document.createElement('td');
 	td1.classList.add('time');
-	td2.classList.add('file');
-	td3.classList.add('size');
-	td4.classList.add('comment');
+	td3.classList.add('file');
+	td4.classList.add('size');
+	td2.classList.add('comment');
 	td5.classList.add('buttons');
 	var time = new Date(parseInt(asset.time));
 	td1.setAttribute('title', time);
 	td1.style.width = '18ex';
 	td1.innerHTML= human_time(new Date(parseInt(asset.time)));
-	td2.setAttribute('title', JSON_tooltip(asset));
+	var td3div0 = document.createElement('div');
 	var file = asset.file || asset['#parent'] || asset._id;
 	if (file) {
 		// here we want to know if we are in the zombillenium case or in the white fang case
 		if ( (asset['#parent'] && !asset.file) || ( asset.synced_online && asset.synced_online > asset.time )) {
-			td2.appendChild(human_filename_href(file));
+			td3div0.appendChild(human_filename_href(file));
 		}
 		else {
-			td2.innerHTML = human_filename_txt(file);
+			td3div0.innerHTML = human_filename_txt(file);
 		}
-	} 
-	td3.innerHTML = human_size( asset.file_size || asset.bytes || asset.size || asset.source_size);
-	td3.setAttribute('title', asset.bytes || asset.size || asset.source_size);
-	td4.innerHTML = '&lt;'+asset.author+'&gt; '+asset.comment;
+	}
+	td3div0.setAttribute('title', JSON_tooltip(asset));
+	td3.appendChild(td3div0);
+	var td4div0 = document.createElement('div');
+	td4div0.innerHTML = human_size( asset.file_size || asset.bytes || asset.size || asset.source_size);
+	td4div0.setAttribute('title', asset.bytes || asset.size || asset.source_size);
+	td4.appendChild(td4div0);
+	td2.innerHTML = '&lt;'+asset.author+'&gt; '+asset.comment;
 	tr.appendChild(td1);
 	tr.appendChild(td2);
 	tr.appendChild(td3);
 	tr.appendChild(td4);
 	tr.appendChild(td5);
-	var td2d1 = document.createElement('div');
-	td2d1.classList.add('children');
-	td2.appendChild(td2d1);
+/*
+	var td3d1 = document.createElement('div');
+	td3d1.classList.add('children');
+	td3.appendChild(td3d1);
 	if (noclickontimebool!==true) {
 		td1.addEventListener('click', function(e){
 			if (asset['#parent']) {
@@ -181,20 +252,15 @@ function tableLogTr(asset, noclickontimebool) {
 			}
 		});
 	}
+*/
 	var td5span0 = document.createElement('span');
 	var td5span1 = document.createElement('span');
 	td5span0.setAttribute('title', 'edit');
 	td5span1.setAttribute('title', 'delete');
 	td5span1.classList.add('delete');
 	if (require.specified('ui_editor')) {
-		tr.addEventListener('click', function(){
+		td4div0.addEventListener('click', function(){
 			initEditor(asset);
-/*
-			if (document.querySelector('tr.selected')){
-				document.querySelector('tr.selected').classList.remove('selected');
-			}
-			tdEdit.parentNode.className = 'selected';
-*/
 		});
 	}
 
@@ -252,7 +318,7 @@ function tableLogTr(asset, noclickontimebool) {
             if (node.time === undefined || node['#parent'] !== undefined ) {
 				return;
 			}
-            var tr = tableLogTr(node);
+            var tr = tr(node);
             tr.style.opacity = '0';
             tbody.insertBefore(tr, tbody.firstChild);
             setTimeout(function() {
