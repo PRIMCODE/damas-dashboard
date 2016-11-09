@@ -132,9 +132,21 @@ table.search td.time {
 	white-space: nowrap;
 	text-align: center;
 }
+table.log td.time {
+	padding-right: 1ex;
+}
 table.log    td.file,
 table.search td.file {
 	white-space: nowrap;
+}
+table td.file a {
+	text-decoration: none;
+}
+table td.file div:hover a {
+	text-decoration: underline;
+}
+table.search td.file:hover a {
+	text-decoration: underline;
 }
 table.log td.size,
 table.search td.size {
@@ -175,6 +187,8 @@ table.search td.buttons {
         overflow-y: auto;
         overflow-x: hidden;
     }
+}
+@media screen and (min-width: 1400px) {
     .nomobile {
         display: inline;
     }

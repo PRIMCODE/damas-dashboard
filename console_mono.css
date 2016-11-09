@@ -1,5 +1,19 @@
+@font-face {
+  font-family: "Share-TechMono";
+  src: url("damas-dashboard/fonts/Share-TechMono.otf");
+}
+
+@font-face {
+  font-family: "Liberation Mono";
+  src: url("damas-dashboard/fonts/LiberationMono-Regular.ttf");
+}
+
 body {
-	font-family: monospace;
+    font-family: "Share-TechMono", monospace;
+    font-family: "Liberation Mono";
+}
+body * {
+	font-size: 12px;
 }
 /* HEADER */
 #header {

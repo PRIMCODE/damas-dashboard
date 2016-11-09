@@ -161,7 +161,7 @@ window.show_log = show_log;
 		function show_users(){
 			//damas.search('username:/.*/', function(res){
 			damas.search_mongo({'username':'REGEX_.*'}, {"username":1},0,0, function(res){
-				damas.read(res, function(users){
+				damas.read(res.ids, function(users){
 					window.users = users;
 					var out = document.querySelector('#contents');
 					var table = document.createElement('table');
@@ -219,7 +219,7 @@ window.show_log = show_log;
 		function show_locks(){
 			//damas.search('lock:/.*/', function(res){
 			damas.search_mongo({'lock':'REGEX_.*'}, {"lock":1},0,0, function(res){
-				damas.read(res, function(assets){
+				damas.read(res.ids, function(assets){
 					var out = document.querySelector('#contents');
 					var table = document.createElement('table');
 					var thead = document.createElement('thead');
@@ -263,25 +263,4 @@ window.show_log = show_log;
 			});
 		}
 
-		function show_wait(){
-				damas.search_mongo(
-					{online:"1", file:{$exists: true}, ino_write: {$exists: false}, time: { $gt: 1463200887000} },
-					{origin:1, file:1}, 0,0, function(res){
-
-				damas.read(res, function(assets){
-					var out = document.querySelector('#contents');
-					var str = '<table><tr><th>file</th><th>origin &xutri;</th></tr>';
-					for(var i=0; i<assets.length; i++)
-					{
-						str +=  '<tr>';
-						//str +=  '<td title="'+JSON_tooltip(assets[i])+'">'+assets[i].file+'</td>';
-						 str +=  '<td title="'+JSON_tooltip(assets[i])+'"><span class="nomobile">'+assets[i].file.split('/').slice(0,-1).join('/')+'/</span>'+assets[i].file.split('/').pop()+'</td>';
-						str +=  '<td>'+(assets[i].origin||'?')+'</td>';
-						str +=  '</tr>';
-					}
-					str += '</table>';
-					out.innerHTML = str;
-				});
-			});
-		}
 
