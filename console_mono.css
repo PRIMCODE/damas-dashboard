@@ -9,12 +9,17 @@
 }
 
 body {
+	font-family: monospace;
+	/*
     font-family: "Share-TechMono", monospace;
     font-family: "Liberation Mono";
+	*/
 }
+/*
 body * {
 	font-size: 12px;
 }
+*/
 /* HEADER */
 #header {
 	padding: 1ex 1ex 1ex 0;
@@ -53,7 +58,7 @@ body * {
 	transition-duration: .1s;
 }
 */
-#contents table tr:nth-child(even) {
+#contents table tbody:nth-child(odd) {
 	background : rgba(128,128,128,.05);
 }
 #contents table tr:hover {
