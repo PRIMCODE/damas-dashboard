@@ -110,7 +110,7 @@ function tablebody(container, nodes) {
 		}
 		if (nodes[i].comment === nodes[i-1].comment) {
 			var trow = tablerow(nodes[i]);
-			trow.querySelector('td.comment').style.visibility = 'hidden';
+			trow.querySelector('td.comment').innerHTML = '';
 			tbody.appendChild(trow);
 		}
 		else {
