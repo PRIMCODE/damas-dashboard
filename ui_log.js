@@ -1,6 +1,15 @@
 require(['domReady'], function (domReady) {
 	domReady(function () {
-		//loadBtUpload();
+
+		var scrollElem = document.getElementById('layer0');
+
+		scrollElem.addEventListener('scroll', function(){
+			if (/#log/.test(location.hash) || location.hash==='') {
+				if (this.scrollHeight - this.scrollTop === this.clientHeight) {
+					show_next();
+				}
+			}
+		});
 	});
 });
 
@@ -9,7 +18,8 @@ var ui_log = {
 nbElements = 100;
 offsetElements = 0;
 var retrieved_nodes = [];
-var scrollElem = document.getElementById('panelPrincipal');
+//var scrollElem = document.body;
+//var scrollElem = window;
 var tableelem;
 
 function show_log(){
@@ -21,14 +31,15 @@ function show_log(){
 	show_next();
 }
 
-scrollElem.addEventListener('scroll', function(){
+/*
+window.addEventListener('scroll', function(){
 	if (/#log/.test(location.hash) || location.hash==='') {
-		if (this.scrollHeight - this.scrollTop === this.clientHeight) {
+		if (document.body.scrollHeight - document.body.scrollTop === document.body.clientHeight) {
 			show_next();
 		}
 	}
 });
-
+*/
 function show_next(){
 	damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
 		damas.read(res.ids, function(nodes){
@@ -139,7 +150,7 @@ function tablerow(node, noclickontimebool) {
 	td5.classList.add('buttons');
 	var time = new Date(parseInt(node.time));
 	td1.style.width = '18ex';
-	td1.innerHTML= human_time(new Date(parseInt(node.time)));
+	td1.innerHTML= html_time(new Date(parseInt(node.time)));
 	var file = node.file || node['#parent'] || node._id;
 	if (file) {
 		// here we want to know if we are in the zombillenium case or in the white fang case

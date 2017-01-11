@@ -19,32 +19,24 @@ body {
 body * {
 	font-size: 12px;
 }
-*/
-/* HEADER */
-#header {
-	padding: 1ex 1ex 1ex 0;
-}
 .editorTitle {
 	padding: 1ex;
 }
-#header a {
-}
-#header a:hover {
+*/
+.menubar a:hover {
     background-color: black; 
     color: white;
 }
-#menubar2 a {
+.menubar a {
 	border: 1px solid black;
     text-decoration: none;
 	padding: 0 1ex;
 	color: black;
 }
-#menubar2 a.selected, #menubar2 .clickable.selected {
+.menubar a.selected, .menubar .clickable.selected {
 	color: white;
 	background-color: black;
 	cursor: default;
-}
-#authInfo {
 }
 #contents {
     padding: 0 1ex;
@@ -58,30 +50,12 @@ body * {
 	transition-duration: .1s;
 }
 */
-#contents table tbody:nth-child(odd) {
+.layerContent table tbody:nth-child(odd) {
 	background : rgba(128,128,128,.05);
 }
-#contents table tr:hover {
+.layerContent table tr:hover {
 	background : rgba(128,128,128,.1);
 	background-opacity:.1;
-/*
-	transition: none;
-	font-weight: bold;
-*/
-}
-
-
-
-/*
-#contents table tr:hover {
-	box-shadow: 0px -4px 2px -2px #888 inset;
-}
-*/
-@media screen and (min-width: 800px) {
-    /* CONTENTS */
-    .panelSecond {
-    	width: 240px;
-    }
 }
 
 table.log td.time {
@@ -105,6 +79,10 @@ table.log tr:hover td.buttons span {
 	opacity: 1;
 }
 
+table.log tr.history td.time {
+	cursor: zoom-out;
+}
+
 /*
 table.log tr.history.first {
 	border-top: 1px solid #666;
@@ -114,6 +92,3 @@ table.log tr.history.last {
 	border-bottom: 1px solid #666;
 }
 */
-table.log tr.history td.time {
-	cursor: zoom-out;
-}

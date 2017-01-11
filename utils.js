@@ -103,6 +103,12 @@ human_time = function ( time )
     return ('00'+time.getDate()).slice(-2)+'/'+('00'+(time.getMonth()+1)).slice(-2)+'/'+('00'+(time.getYear())).slice(-2)+' '+('00'+time.getHours()).slice(-2)+':'+('00'+time.getMinutes()).slice(-2)+':'+('00'+time.getSeconds()).slice(-2);
 }
 
+html_time = function ( time )
+{
+	if(time['getDate'] === undefined) return '<span class="nomobile">??/??/?? </span>??:??:??';
+    return '<span class="nomobile">'+('00'+time.getDate()).slice(-2)+'/'+('00'+(time.getMonth()+1)).slice(-2)+'/'+('00'+(time.getYear())).slice(-2)+' </span>'+('00'+time.getHours()).slice(-2)+':'+('00'+time.getMinutes()).slice(-2)+':'+('00'+time.getSeconds()).slice(-2);
+}
+
 human_filename_txt = function ( file )
 {
 	return '<span class="nomobile">'+file.split('/').slice(0,-1).join('/')+'/</span>'+file.split('/').pop();
@@ -115,7 +121,7 @@ human_filename_href = function ( file )
 	a.setAttribute('href', '/api/file'+file);
 	a.addEventListener('click', function(e){
 		e.preventDefault()
-		window.location.hash = '#view=/api/file'+file;
+		window.location.hash = '#view='+file;
 	});
 	var path = document.createElement('span');
 	path.className = 'nomobile';
