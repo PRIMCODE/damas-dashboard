@@ -112,7 +112,6 @@ define(['domReady', "damas", "utils"], function (domReady, damas) {
 	require(["ui_upload"]);
 	require(["ui_editor"]);
 	require(["ui_search"]);
-	require(["ui_announced"]);
 	//require(["scripts/assetViewer/ui_overlay"]);
 	//require(["assetViewer"]);
 	window.damas = damas;
