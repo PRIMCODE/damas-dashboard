@@ -127,9 +127,9 @@ body, html {
 }
 
 .layerPanel {
+	transition: width .3s, min-width .3s;
 /*
 	width: 50ex;
-	transition: width .3s, min-width .3s;
 	flex-grow: 1;
 	min-width: 50ex;
 	*/
@@ -222,6 +222,9 @@ span.cellError {
 	background-color: red;
 }
 @media screen and (max-width: 800px) {
+    .layerPanel {
+		flex-grow: 1;
+	}
     #panelSecond {
 		width: 100%;
 		min-width: 100%;

@@ -199,11 +199,19 @@ window.show_log = show_log;
 				var th2 = document.createElement('th');
 				var th3 = document.createElement('th');
 				var th4 = document.createElement('th');
+				var th5 = document.createElement('th');
+				var th6 = document.createElement('th');
+				var th7 = document.createElement('th');
+				var th8 = document.createElement('th');
 				table.appendChild(thead);
 				thead.appendChild(th1);
 				thead.appendChild(th2);
 				thead.appendChild(th3);
 				thead.appendChild(th4);
+				thead.appendChild(th5);
+				thead.appendChild(th6);
+				thead.appendChild(th7);
+				thead.appendChild(th8);
 				table.classList.add('servers');
 				th1.classList.add('servername');
 				th2.classList.add('email');
@@ -214,6 +222,10 @@ window.show_log = show_log;
 				th2.innerHTML = 'last scan';
 				th3.innerHTML = 'scan duration';
 				th4.innerHTML = 'status';
+				th5.innerHTML = 'ul';
+				th6.innerHTML = 'ul err';
+				th7.innerHTML = 'dl';
+				th8.innerHTML = 'dl err';
 				out.innerHTML = '';
 				out.appendChild(table);
 					for (var i=0; i<servers.length; i++) {
@@ -223,19 +235,29 @@ window.show_log = show_log;
 						var td2 = document.createElement('td');
 						var td3 = document.createElement('td');
 						var td4 = document.createElement('td');
+						var td5 = document.createElement('td');
+						var td6 = document.createElement('td');
+						var td7 = document.createElement('td');
+						var td8 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
 						tr.appendChild(td1);
 						tr.appendChild(td2);
 						tr.appendChild(td3);
 						tr.appendChild(td4);
+						tr.appendChild(td5);
+						tr.appendChild(td6);
+						tr.appendChild(td7);
+						tr.appendChild(td8);
 						td1.classList.add('username');
 						td2.classList.add('email');
 						td3.classList.add('userclass');
 						//td4.classList.add('lastlogin');
 						//td4.classList.add('time');
 						//tr.setAttribute('title', JSON_tooltip(servers[i]));
-						if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
+						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
+						//if (servers[i].rsync_ul_exit == 0 && servers[i].rsync_dl_exit == 0) {
+						if (!servers[i].rsync_ul_exit & !servers[i].rsync_dl_exit) {
 							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
 						}
 						else {
@@ -269,6 +291,10 @@ window.show_log = show_log;
 							}
 						}(servers[i]));
 
+						td5.innerHTML = servers[i].rsync_ul_exit || 'OK';
+						td6.innerHTML = servers[i].rsync_ul_stderr || '';
+						td7.innerHTML = servers[i].rsync_dl_exit || 'OK';
+						td8.innerHTML = servers[i].rsync_dl_stderr || '';
 
 
 					}
