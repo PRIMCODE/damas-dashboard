@@ -200,18 +200,12 @@ window.show_log = show_log;
 				var th3 = document.createElement('th');
 				var th4 = document.createElement('th');
 				var th5 = document.createElement('th');
-				var th6 = document.createElement('th');
-				var th7 = document.createElement('th');
-				var th8 = document.createElement('th');
 				table.appendChild(thead);
 				thead.appendChild(th1);
 				thead.appendChild(th2);
 				thead.appendChild(th3);
 				thead.appendChild(th4);
 				thead.appendChild(th5);
-				thead.appendChild(th6);
-				thead.appendChild(th7);
-				thead.appendChild(th8);
 				table.classList.add('servers');
 				th1.classList.add('servername');
 				th2.classList.add('email');
@@ -219,14 +213,11 @@ window.show_log = show_log;
 				th4.classList.add('lastlogin');
 				//th4.classList.add('time');
 				th1.innerHTML = 'server';
-				th2.innerHTML = 'last scan';
-				th3.innerHTML = 'scan duration';
-				th4.innerHTML = 'status';
-				th5.innerHTML = 'ul';
-				th6.innerHTML = 'ul err';
-				th7.innerHTML = 'dl';
-				th8.innerHTML = 'dl err';
-				out.innerHTML = '';
+				th2.innerHTML = 'upload';
+				th3.innerHTML = 'download';
+				th4.innerHTML = 'scan';
+				th5.innerHTML = 'duration';
+				out.innerHTML = '<h1>Servers</h1>';
 				out.appendChild(table);
 					for (var i=0; i<servers.length; i++) {
 						var tbody = document.createElement('tbody');
@@ -236,9 +227,6 @@ window.show_log = show_log;
 						var td3 = document.createElement('td');
 						var td4 = document.createElement('td');
 						var td5 = document.createElement('td');
-						var td6 = document.createElement('td');
-						var td7 = document.createElement('td');
-						var td8 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
 						tr.appendChild(td1);
@@ -246,10 +234,12 @@ window.show_log = show_log;
 						tr.appendChild(td3);
 						tr.appendChild(td4);
 						tr.appendChild(td5);
-						tr.appendChild(td6);
-						tr.appendChild(td7);
-						tr.appendChild(td8);
+						td1.style.paddingRight="1ex";
 						td1.classList.add('username');
+						td1.style.whiteSpace="nowrap";
+						td4.style.whiteSpace="nowrap";
+						td5.style.paddingRight="1ex";
+						td5.style.textAlign="right";
 						td2.classList.add('email');
 						td3.classList.add('userclass');
 						//td4.classList.add('lastlogin');
@@ -264,24 +254,29 @@ window.show_log = show_log;
 							td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
 						}
 						td1.innerHTML += conf.servers[i];
+						td2.innerHTML = servers[i].rsync_ul_stderr || 'OK';
+						td3.innerHTML = servers[i].rsync_dl_stderr || 'OK';
+
 						if (servers[i] === null) {
 							continue;
 						}
-						//td2.innerHTML= servers[i].email;
 						var str = "";
 						if (servers[i].scan_time){
 							str += html_time(new Date(servers[i].scan_time));
 							str += ' ('+servers[i].scan_exit+')';
-							td2.innerHTML = str;
+							td4.innerHTML = str;
+						}
+						else {
+							//td4.innerHTML = '_';
 						}
 						if (servers[i].scan_duration){
 							str = ' '+servers[i].scan_duration/1000+'\"';
-							td3.innerHTML = str;
+							td5.innerHTML = str;
 						}
 						else {
-							td2.innerHTML = '';
+							td5.innerHTML = '_';
 						}
-						td4.innerHTML = servers[i].rsync_stderr || 'OK';
+						td4.innerHTML += servers[i].rsync_stderr || 'OK';
 
 						(function (node){
 							if (require.specified('ui_editor')) {
@@ -290,13 +285,6 @@ window.show_log = show_log;
 								});
 							}
 						}(servers[i]));
-
-						td5.innerHTML = servers[i].rsync_ul_exit || 'OK';
-						td6.innerHTML = servers[i].rsync_ul_stderr || '';
-						td7.innerHTML = servers[i].rsync_dl_exit || 'OK';
-						td8.innerHTML = servers[i].rsync_dl_stderr || '';
-
-
 					}
 			});
 
