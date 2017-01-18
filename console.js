@@ -24,7 +24,7 @@ require.config({
 window.processHash = true;
 
 window.addEventListener("hashchange", function() {
-    process_hash();
+	process_hash();
 });
 
 window.addEventListener('damasapi:error', function(e){
@@ -318,6 +318,7 @@ window.show_log = show_log;
 					var th2 = document.createElement('th');
 					var th3 = document.createElement('th');
 					var th4 = document.createElement('th');
+					var th5 = document.createElement('th');
 					table.classList.add('users');
 					th1.classList.add('username');
 					th2.classList.add('email');
@@ -332,8 +333,9 @@ window.show_log = show_log;
 					thead.appendChild(th2);
 					thead.appendChild(th3);
 					thead.appendChild(th4);
+					thead.appendChild(th5);
 					table.appendChild(thead);
-					out.innerHTML = '';
+					out.innerHTML = '<h1>Users</h1>';
 					out.appendChild(table);
 					for (var i=0; i<users.length; i++) {
 						var tbody = document.createElement('tbody');
@@ -342,12 +344,14 @@ window.show_log = show_log;
 						var td2 = document.createElement('td');
 						var td3 = document.createElement('td');
 						var td4 = document.createElement('td');
+						var td5 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
 						tr.appendChild(td1);
 						tr.appendChild(td2);
 						tr.appendChild(td3);
 						tr.appendChild(td4);
+						tr.appendChild(td5);
 						td1.classList.add('username');
 						td2.classList.add('email');
 						td3.classList.add('userclass');
@@ -360,9 +364,27 @@ window.show_log = show_log;
 						if (users[i].lastlogin){
 							td4.innerHTML= html_time(new Date(users[i].lastlogin));
 						}
+						var inp = document.createElement('input');
+						inp.type = 'checkbox';
+						inp.style.marginTop = '0';
+						inp.style.marginBottom = '0';
+						inp.checked = users[i].email_daily_report;
+						inp.json = users[i];
+						td5.appendChild(inp);
+						inp.title = 'email_daily_report';
+						inp.addEventListener('click', function(e){
+							e.target.json.email_daily_report = e.target.checked;
+							damas.update(e.target.json);
+						});
+						var b = document.createElement('i');
+						b.classList.add('fa');
+						b.classList.add('fa-pencil');
+						b.style.cursor = 'pointer';
+						b.style.verticalAlign = 'top';
+						td5.appendChild(b);
 						(function (node){
 							if (require.specified('ui_editor')) {
-								tr.addEventListener('click', function(){
+								b.addEventListener('click', function(){
 									initEditor(node);
 								});
 							}
