@@ -199,13 +199,13 @@ window.show_log = show_log;
 				var th2 = document.createElement('th');
 				var th3 = document.createElement('th');
 				var th4 = document.createElement('th');
-				var th5 = document.createElement('th');
+				//var th5 = document.createElement('th');
 				table.appendChild(thead);
 				thead.appendChild(th1);
 				thead.appendChild(th2);
 				thead.appendChild(th3);
 				thead.appendChild(th4);
-				thead.appendChild(th5);
+				//thead.appendChild(th5);
 				table.classList.add('servers');
 				th1.classList.add('servername');
 				th2.classList.add('email');
@@ -213,10 +213,10 @@ window.show_log = show_log;
 				th4.classList.add('lastlogin');
 				//th4.classList.add('time');
 				th1.innerHTML = 'server';
-				th2.innerHTML = 'upload';
-				th3.innerHTML = 'download';
+				th2.innerHTML = 'emission';
+				th3.innerHTML = 'reception';
 				th4.innerHTML = 'scan';
-				th5.innerHTML = 'duration';
+				//th5.innerHTML = 'duration';
 				out.innerHTML = '<h1>Servers</h1>';
 				out.appendChild(table);
 					for (var i=0; i<servers.length; i++) {
@@ -226,20 +226,20 @@ window.show_log = show_log;
 						var td2 = document.createElement('td');
 						var td3 = document.createElement('td');
 						var td4 = document.createElement('td');
-						var td5 = document.createElement('td');
+						//var td5 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
 						tr.appendChild(td1);
 						tr.appendChild(td2);
 						tr.appendChild(td3);
 						tr.appendChild(td4);
-						tr.appendChild(td5);
+						//tr.appendChild(td5);
 						td1.style.paddingRight="1ex";
 						td1.classList.add('username');
 						td1.style.whiteSpace="nowrap";
-						td4.style.whiteSpace="nowrap";
-						td5.style.paddingRight="1ex";
-						td5.style.textAlign="right";
+						//td4.style.whiteSpace="nowrap";
+						//td5.style.paddingRight="1ex";
+						//td5.style.textAlign="right";
 						td2.classList.add('email');
 						td3.classList.add('userclass');
 						//td4.classList.add('lastlogin');
@@ -247,36 +247,46 @@ window.show_log = show_log;
 						//tr.setAttribute('title', JSON_tooltip(servers[i]));
 						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
 						//if (servers[i].rsync_ul_exit == 0 && servers[i].rsync_dl_exit == 0) {
-						if (!servers[i].rsync_ul_exit & !servers[i].rsync_dl_exit) {
+						if (!servers[i].rsync_ul_exit & !servers[i].rsync_dl_exit & !servers[i].scan_exit) {
 							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
 						}
 						else {
 							td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
 						}
 						td1.innerHTML += conf.servers[i];
-						td2.innerHTML = servers[i].rsync_ul_stderr || 'OK';
-						td3.innerHTML = servers[i].rsync_dl_stderr || 'OK';
+						var a = document.createElement('a');
+						a.href = '#search={"origin":"'+conf.servers[i]+'"}&sort=time';
+						a.innerHTML = 'view';
+						td2.appendChild(a);
+						td2.innerHTML += '<br/>';
+						td2.innerHTML += servers[i].rsync_ul_stderr || '';
+
+						var a = document.createElement('a');
+						//a.href = '#search={"synced_":"'+conf.servers[i]+'"}';
+						//a.innerHTML = 'view';
+						td3.innerHTML += servers[i].rsync_dl_stderr || 'OK';
 
 						if (servers[i] === null) {
 							continue;
 						}
-						var str = "";
+
+						var str = '';
 						if (servers[i].scan_time){
-							str += html_time(new Date(servers[i].scan_time));
-							str += ' ('+servers[i].scan_exit+')';
-							td4.innerHTML = str;
+							str += ' (' + html_time(new Date(servers[i].scan_time)) +')';
+							//str += ' ('+servers[i].scan_exit+')';
 						}
 						else {
 							//td4.innerHTML = '_';
 						}
 						if (servers[i].scan_duration){
-							str = ' '+servers[i].scan_duration/1000+'\"';
-							td5.innerHTML = str;
+							str += ' '+servers[i].scan_duration/1000+'\"';
 						}
-						else {
-							td5.innerHTML = '_';
-						}
-						td4.innerHTML += servers[i].rsync_stderr || 'OK';
+						str += '<br/>';
+						str += servers[i].scan_stderr || '';
+						td4.innerHTML = str;
+						//else {
+							//td5.innerHTML = '_';
+						//}
 
 						(function (node){
 							if (require.specified('ui_editor')) {
