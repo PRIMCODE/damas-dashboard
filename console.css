@@ -216,6 +216,9 @@ table.search td.buttons {
 	text-align: right;
 }
 
+table.servers th {
+	text-align: left;
+}
 
 
 span.cellError {

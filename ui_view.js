@@ -51,10 +51,34 @@
 		});
 		//damas.read(id, function(n){
 		//});
+		var ul = document.createElement('ul');
+		p.appendChild(ul);
+
+		var li = document.createElement('li');
+		var ta = document.createElement('textarea');
+		ul.appendChild(li);
+		li.appendChild(ta);
+		ta.placeholder="Write a comment...";
+		ta.rows=1;
+		var bu = document.createElement('button');
+		bu.innerHTML="SEND";
+		li.style.position="relative";
+		bu.style.position="absolute";
+		bu.style.bottom="0";
+		bu.style.right="0";
+		li.appendChild(bu);
+ 		bu.addEventListener('click', function(e){
+			//damas.update({_id:id, e.target.parentNode.querySelector('textarea').value);
+			damas.create({
+				parent: id,
+				comment: e.target.parentNode.querySelector('textarea').value
+			});
+		});
+
 		damas.search('#parent:'+id, function(children_ids){
 			damas.read(children_ids, function(children_n){
 				for (var i= 0; i < children_n.length ; i++){
-					p.appendChild(node_list_item(children_n[i]));
+					ul.appendChild(node_list_item(children_n[i]));
 				}
 			});
 		});
@@ -70,8 +94,8 @@
 		d2.setAttribute('class', 'time');
 		d3.setAttribute('class', 'comment');
 		i.appendChild(d1);
-		i.appendChild(d2);
 		i.appendChild(d3);
+		i.appendChild(d2);
 		d1.innerHTML = node.author;
 		d2.innerHTML = html_time(new Date(node.time));
 		d3.innerHTML = node.comment;

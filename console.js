@@ -199,23 +199,20 @@ window.show_log = show_log;
 				var th2 = document.createElement('th');
 				var th3 = document.createElement('th');
 				var th4 = document.createElement('th');
-				//var th5 = document.createElement('th');
+				var th5 = document.createElement('th');
 				table.appendChild(thead);
 				thead.appendChild(th1);
 				thead.appendChild(th2);
 				thead.appendChild(th3);
 				thead.appendChild(th4);
-				//thead.appendChild(th5);
+				thead.appendChild(th5);
 				table.classList.add('servers');
 				th1.classList.add('servername');
-				th2.classList.add('email');
-				th3.classList.add('userclass');
-				th4.classList.add('lastlogin');
-				//th4.classList.add('time');
 				th1.innerHTML = 'server';
-				th2.innerHTML = 'emission';
-				th3.innerHTML = 'reception';
-				th4.innerHTML = 'scan';
+				th2.innerHTML = 'type';
+				th3.innerHTML = 'emission';
+				th4.innerHTML = 'reception';
+				th5.innerHTML = 'scan';
 				//th5.innerHTML = 'duration';
 				out.innerHTML = '<h1>Servers</h1>';
 				out.appendChild(table);
@@ -226,6 +223,7 @@ window.show_log = show_log;
 						var td2 = document.createElement('td');
 						var td3 = document.createElement('td');
 						var td4 = document.createElement('td');
+						var td5 = document.createElement('td');
 						//var td5 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
@@ -233,20 +231,15 @@ window.show_log = show_log;
 						tr.appendChild(td2);
 						tr.appendChild(td3);
 						tr.appendChild(td4);
+						tr.appendChild(td5);
 						//tr.appendChild(td5);
 						td1.style.paddingRight="1ex";
 						td1.classList.add('username');
 						td1.style.whiteSpace="nowrap";
-						//td4.style.whiteSpace="nowrap";
-						//td5.style.paddingRight="1ex";
-						//td5.style.textAlign="right";
-						td2.classList.add('email');
-						td3.classList.add('userclass');
-						//td4.classList.add('lastlogin');
-						//td4.classList.add('time');
 						//tr.setAttribute('title', JSON_tooltip(servers[i]));
 						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
 						//if (servers[i].rsync_ul_exit == 0 && servers[i].rsync_dl_exit == 0) {
+						td2.innerHTML = (servers[i].caseinsensitive === true)? 'Windows':'';
 						if (!servers[i].rsync_ul_exit & !servers[i].rsync_dl_exit & !servers[i].scan_exit) {
 							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
 						}
@@ -256,34 +249,42 @@ window.show_log = show_log;
 						td1.innerHTML += conf.servers[i];
 						var a = document.createElement('a');
 						a.href = '#search={"origin":"'+conf.servers[i]+'"}&sort=time';
-						a.innerHTML = 'view';
-						td2.appendChild(a);
-						td2.innerHTML += '<br/>';
-						td2.innerHTML += servers[i].rsync_ul_stderr || '';
+						a.innerHTML = 'list';
+						td3.appendChild(a);
+						td3.innerHTML += '<br/>';
+						td3.innerHTML += servers[i].rsync_ul_stderr || '';
 
 						var a = document.createElement('a');
-						//a.href = '#search={"synced_":"'+conf.servers[i]+'"}';
-						//a.innerHTML = 'view';
-						td3.innerHTML += servers[i].rsync_dl_stderr || 'OK';
+						a.href = '#search={"_id":"REGEX_/","synced_'+conf.servers[i]+'":{"$exists":false},"origin":{"$ne":"'+conf.servers[i]+'"},"deleted":{"$ne":true},"sync_disabled":{"$ne":true}}';
+						a.innerHTML = 'list';
+						td4.appendChild(a);
+						td4.innerHTML += ' ';
+
+						td4.innerHTML += servers[i].rsync_dl_stderr || 'OK';
 
 						if (servers[i] === null) {
 							continue;
 						}
 
-						var str = '';
+						var str = '<span style="white-space: nowrap">';
 						if (servers[i].scan_time){
-							str += ' (' + html_time(new Date(servers[i].scan_time)) +')';
+							str += html_time(new Date(servers[i].scan_time));
 							//str += ' ('+servers[i].scan_exit+')';
 						}
 						else {
-							//td4.innerHTML = '_';
+							//td5.innerHTML = '_';
 						}
 						if (servers[i].scan_duration){
-							str += ' '+servers[i].scan_duration/1000+'\"';
+							str += ' (';
+							var minutes = Math.floor(servers[i].scan_duration/1000/60);
+							if (0<minutes){
+								str += minutes+'\'';
+							}
+							str += servers[i].scan_duration/1000 % 60+'\")';
 						}
-						str += '<br/>';
+						str += '</span><br/>';
 						str += servers[i].scan_stderr || '';
-						td4.innerHTML = str;
+						td5.innerHTML = str;
 						//else {
 							//td5.innerHTML = '_';
 						//}
@@ -368,7 +369,10 @@ window.show_log = show_log;
 						td4.classList.add('lastlogin');
 						td4.classList.add('time');
 						tr.setAttribute('title', JSON_tooltip(users[i]));
-						td1.innerHTML= users[i].username;
+						var a = document.createElement('a');
+						a.innerHTML= users[i].username;
+						a.href = '#search={"author":"'+users[i].username+'"}&sort=time';
+						td1.appendChild(a);
 						td2.innerHTML= users[i].email;
 						td3.innerHTML= users[i].class;
 						if (users[i].lastlogin){

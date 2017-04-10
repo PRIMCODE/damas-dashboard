@@ -162,7 +162,7 @@ function tablerow(node, noclickontimebool) {
 		}
 	}
 	td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
-	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment;
+	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment.replace(/\n/g,'<br/>');
 	tr.appendChild(td1);
 	tr.appendChild(td2);
 	tr.appendChild(td3);
