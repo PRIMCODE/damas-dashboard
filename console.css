@@ -68,8 +68,9 @@ body, html {
 }
 #contents table {
 	width: 100%;
-    border-collapse: collapse;
+	border-spacing: 1px;
 	/*
+    border-collapse: collapse;
 	table-layout: fixed;
 	*/
 }
@@ -77,6 +78,7 @@ body, html {
 }
 #contents table th {
 	white-space: nowrap;
+	vertical-align: bottom;
 }
 #contents table td {
 	vertical-align: top;

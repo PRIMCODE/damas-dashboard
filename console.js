@@ -8,13 +8,14 @@ require.config({
 	}],
 */
 	paths: {
-		'damas': "/damas",
+		'damas': "/js/damas",
 		'utils': "utils",
 		'ui_log': "ui_log",
 		'ui_view': "ui_view",
 		'ui_upload': 'generic-ui/scripts/uiComponents/ui_upload',
 		'ui_editor': 'generic-ui/scripts/uiComponents/ui_editor',
 		'ui_search': 'generic-ui/scripts/uiComponents/ui_search',
+		'rsync': 'rsync',
 		'domReady': '//cdn.rawgit.com/requirejs/domReady/2.0.1/domReady'
 	},
 	urlArgs: "v=" +  (new Date()).getTime()
@@ -95,6 +96,11 @@ process_hash = function() {
 		document.querySelector('#contents').innerHTML = '';
 		show_servers();
 	}
+	if (/#rsync/.test(location.hash)) {
+		//document.querySelector('#but_servers').classList.add('selected');
+		document.querySelector('#contents').innerHTML = '';
+		rsync.draw();
+	}
 	if (/#log/.test(location.hash) || location.hash === '' ) {
 		document.querySelector('#but_log').classList.add('selected');
 		show_log();
@@ -105,13 +111,14 @@ process_hash = function() {
 
 
 
-define(['domReady', "damas", "utils"], function (domReady, damas) {
+define(['domReady', "damas", "utils", "rsync"], function (domReady, damas, rsync) {
 	//require(["./conf.json"]);
 	require(["ui_log", "ui_view"], function () {
 	require(["assetViewer"]);
 	require(["ui_upload"]);
 	require(["ui_editor"]);
 	require(["ui_search"]);
+	//var rsync = require(["rsync"]);
 	//require(["scripts/assetViewer/ui_overlay"]);
 	//require(["assetViewer"]);
 	window.damas = damas;
@@ -191,8 +198,28 @@ window.show_log = show_log;
 		 * Methods
 		 */
 		function show_servers(){
+
+
+						function html_cell(switche, title){
+							var c = document.createElement('span');
+							c.innerHTML = '&nbsp;';
+							c.setAttribute('title', title);
+							c.style.cursor = 'default';
+							if (switche) {
+								c.classList.add('synced');
+							}
+							else {
+								c.classList.add('cellError');
+							}
+							return c;
+
+						}
+
+
 			var out = document.querySelector('#contents');
-			damas.read(conf.servers, function(servers){
+			damas.search('_id:/^sit\/.*/', function( serversids ){
+				//damas.read(conf.servers, function(servers){
+				damas.read(serversids, function(servers){
 				var table = document.createElement('table');
 				var thead = document.createElement('thead');
 				var th1 = document.createElement('th');
@@ -209,10 +236,13 @@ window.show_log = show_log;
 				table.classList.add('servers');
 				th1.classList.add('servername');
 				th1.innerHTML = 'server';
-				th2.innerHTML = 'type';
-				th3.innerHTML = 'emission';
-				th4.innerHTML = 'reception';
-				th5.innerHTML = 'scan';
+				th2.innerHTML = 'emission';
+				th3.innerHTML = 'reception';
+				th4.innerHTML = 'scan';
+				th5.innerHTML = 'type';
+				th2.setAttribute('colspan','2');
+				th3.setAttribute('colspan','2');
+				th4.setAttribute('colspan','2');
 				//th5.innerHTML = 'duration';
 				out.innerHTML = '<h1>Servers</h1>';
 				out.appendChild(table);
@@ -221,16 +251,22 @@ window.show_log = show_log;
 						var tr = document.createElement('tr');
 						var td1 = document.createElement('td');
 						var td2 = document.createElement('td');
+						var td22 = document.createElement('td');
 						var td3 = document.createElement('td');
+						var td32 = document.createElement('td');
 						var td4 = document.createElement('td');
+						var td42 = document.createElement('td');
 						var td5 = document.createElement('td');
 						//var td5 = document.createElement('td');
 						table.appendChild(tbody);
 						tbody.appendChild(tr);
 						tr.appendChild(td1);
 						tr.appendChild(td2);
+						tr.appendChild(td22);
 						tr.appendChild(td3);
+						tr.appendChild(td32);
 						tr.appendChild(td4);
+						tr.appendChild(td42);
 						tr.appendChild(td5);
 						//tr.appendChild(td5);
 						td1.style.paddingRight="1ex";
@@ -238,41 +274,53 @@ window.show_log = show_log;
 						td1.style.whiteSpace="nowrap";
 						//tr.setAttribute('title', JSON_tooltip(servers[i]));
 						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
-						//if (servers[i].rsync_ul_exit == 0 && servers[i].rsync_dl_exit == 0) {
-						td2.innerHTML = (servers[i].caseinsensitive === true)? 'Windows':'';
-						if (!servers[i].rsync_ul_exit & !servers[i].rsync_dl_exit & !servers[i].scan_exit) {
+						//if (servers[i].exit_emission == 0 && servers[i].exit_reception == 0) {
+						td5.innerHTML = (servers[i].caseinsensitive === true)? 'Windows':'';
+						/*
+						if (!servers[i].exit_emission & !servers[i].exit_reception & !servers[i].exit_scan) {
 							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
 						}
 						else {
 							td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
 						}
-						td1.innerHTML += conf.servers[i];
-						var a = document.createElement('a');
-						a.href = '#search={"origin":"'+conf.servers[i]+'"}&sort=time';
-						a.innerHTML = 'list';
-						td3.appendChild(a);
-						td3.innerHTML += '<br/>';
-						td3.innerHTML += servers[i].rsync_ul_stderr || '';
+						*/
+						td1.innerHTML += servers[i].name;
 
-						var a = document.createElement('a');
-						a.href = '#search={"_id":"REGEX_/","synced_'+conf.servers[i]+'":{"$exists":false},"origin":{"$ne":"'+conf.servers[i]+'"},"deleted":{"$ne":true},"sync_disabled":{"$ne":true}}';
-						a.innerHTML = 'list';
-						td4.appendChild(a);
-						td4.innerHTML += ' ';
+						td2.appendChild(html_cell(!servers[i].exit_emission, human_time(new Date(servers[i].last_emission))));
+						//td2.innerHTML += " ";
 
-						td4.innerHTML += servers[i].rsync_dl_stderr || 'OK';
+						td22.innerHTML = html_time(new Date(servers[i].last_emission)) + ' (';
+						var a = document.createElement('a');
+						a.href = '#search={"origin":"'+servers[i].name+'"}&sort=time';
+						a.innerHTML = 'files';
+						td22.appendChild(a);
+						td22.innerHTML += ')';
+						//td2.innerHTML += '<br/>';
+
+
+
+						td3.appendChild(html_cell(!servers[i].exit_reception, human_time(new Date(servers[i].last_reception))));
+						//td3.innerHTML += " ";
+						td32.innerHTML = html_time(new Date(servers[i].last_reception)) + ' (';
+						var a = document.createElement('a');
+						a.href = '#search={"_id":"REGEX_/","synced_'+servers[i].name+'":{"$exists":false},"origin":{"$ne":"'+servers[i].name+'"},"deleted":{"$ne":true},"sync_disabled":{"$ne":true}}';
+						a.innerHTML = 'files';
+						td32.appendChild(a);
+						td32.innerHTML += ')';
 
 						if (servers[i] === null) {
 							continue;
 						}
 
+						td4.appendChild(html_cell(!servers[i].exit_scan, human_time(new Date(servers[i].last_scan))));
+						//td4.innerHTML += " ";
 						var str = '<span style="white-space: nowrap">';
-						if (servers[i].scan_time){
-							str += html_time(new Date(servers[i].scan_time));
-							//str += ' ('+servers[i].scan_exit+')';
+						if (servers[i].last_scan){
+							str += html_time(new Date(servers[i].last_scan));
+							//str += ' ('+servers[i].exit_scan+')';
 						}
 						else {
-							//td5.innerHTML = '_';
+							//td4.innerHTML = '_';
 						}
 						if (servers[i].scan_duration){
 							str += ' (';
@@ -283,10 +331,9 @@ window.show_log = show_log;
 							str += servers[i].scan_duration/1000 % 60+'\")';
 						}
 						str += '</span><br/>';
-						str += servers[i].scan_stderr || '';
-						td5.innerHTML = str;
+						td42.innerHTML += str;
 						//else {
-							//td5.innerHTML = '_';
+							//td4.innerHTML = '_';
 						//}
 
 						(function (node){
@@ -296,8 +343,27 @@ window.show_log = show_log;
 								});
 							}
 						}(servers[i]));
+
+
+						var tr = document.createElement('tr');
+						var td1 = document.createElement('td');
+						var td2 = document.createElement('td');
+						tbody.appendChild(tr);
+						tr.appendChild(td1);
+						tr.appendChild(td2);
+						td2.setAttribute('colspan','7');
+						if (servers[i].stderr_emission){
+							td2.innerHTML += '<em>emission:</em>'+servers[i].stderr_emission+'<br/>';
+						}
+						if (servers[i].stderr_reception){
+							td2.innerHTML += '<em>reception:</em><br/>'+servers[i].stderr_reception+'<br/>';
+						}
+						if (servers[i].stderr_scan){
+							td2.innerHTML += '<br/><em>scan:</em><br/>'+servers[i].stderr_scan+'<br/>';
+						}
+						td2.innerHTML += '<br/>';
 					}
-			});
+			})});
 
 			/*
 			if (conf.syncKeys) {

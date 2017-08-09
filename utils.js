@@ -36,7 +36,7 @@ JSON_tooltip = function ( obj )
 damas_connect = function (server_url, callback)
 {
     damas.server = server_url;
-    if (localStorage) {                                                                                                              
+    if (localStorage){
         damas.token = localStorage.getItem("token");
         document.cookie = "token="+damas.token;
         damas.user = JSON.parse(localStorage.getItem("user"));

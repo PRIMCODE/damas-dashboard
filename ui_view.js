@@ -69,9 +69,11 @@
 		li.appendChild(bu);
  		bu.addEventListener('click', function(e){
 			//damas.update({_id:id, e.target.parentNode.querySelector('textarea').value);
-			damas.create({
-				parent: id,
+			damas.comment({
+				'#parent': id,
 				comment: e.target.parentNode.querySelector('textarea').value
+			}, function(res){
+				alert(res);
 			});
 		});
 
