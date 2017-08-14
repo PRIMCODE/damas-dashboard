@@ -129,7 +129,7 @@ rsync.show_server = function(server, out) {
 	div.appendChild(rsync.show_line(server, 'asset_reception', 'boolean', false));
 	div.appendChild(rsync.show_line(server, 'asset_scan', 'boolean', false));
 	div.appendChild(rsync.show_line(server, 'asset_delete', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'rsync_url', 'text', ''));
+	div.appendChild(rsync.show_line(server, 'url', 'text', ''));
 	div.appendChild(rsync.show_line(server, 'rsync_args', 'text', ''));
 	div.appendChild(rsync.show_line(server, 'rsync_env', 'text', '________'));
 	return div;

@@ -352,16 +352,19 @@ window.show_log = show_log;
 						tr.appendChild(td1);
 						tr.appendChild(td2);
 						td2.setAttribute('colspan','7');
+						var errordiv = document.createElement('div');
+						errordiv.classList.add('errortext');
+						td2.appendChild(errordiv);
 						if (servers[i].stderr_emission){
-							td2.innerHTML += '<em>emission:</em>'+servers[i].stderr_emission+'<br/>';
+							errordiv.innerHTML += '<em>emission:</em>'+servers[i].stderr_emission+'<br/>';
 						}
 						if (servers[i].stderr_reception){
-							td2.innerHTML += '<em>reception:</em><br/>'+servers[i].stderr_reception+'<br/>';
+							errordiv.innerHTML += '<em>reception:</em><br/>'+servers[i].stderr_reception+'<br/>';
 						}
 						if (servers[i].stderr_scan){
-							td2.innerHTML += '<br/><em>scan:</em><br/>'+servers[i].stderr_scan+'<br/>';
+							errordiv.innerHTML += '<br/><em>scan:</em><br/>'+servers[i].stderr_scan+'<br/>';
 						}
-						td2.innerHTML += '<br/>';
+						td2.innerHTML += '</div><br/>';
 					}
 			})});
 

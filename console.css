@@ -266,3 +266,11 @@ span.cellError {
         display: inline;
     }
 }
+
+.errortext {
+	color: #d76c6c;
+}
+
+.errorbox {
+	background-color: #e7acac;
+}
