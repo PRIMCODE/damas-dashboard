@@ -209,6 +209,9 @@ table.log td.comment {
 table.users .userclass {
 	text-align: center;
 }
+table.users td.email {
+	text-align: right;
+}
 table.log td.sync,
 table.search td.sync {
 	text-align: center;

@@ -125,11 +125,16 @@ human_filename_href = function ( file )
 	});
 	var path = document.createElement('span');
 	path.className = 'nomobile';
-	//if (file){
-		path.innerHTML = file.split('/').slice(0,-1).join('/')+'/';
-	//}
 	a.appendChild(path);
-	a.innerHTML += file.split('/').pop();
+
+	if (file[file.length-1] === '/') {
+		path.innerHTML = file.split('/').slice(0,-2).join('/')+'/';
+		a.innerHTML += file.split('/').slice(-2,-1)+'/';
+	}
+	else {
+		path.innerHTML = file.split('/').slice(0,-1).join('/')+'/';
+		a.innerHTML += file.split('/').pop();
+	}
 	return a;
 }
 

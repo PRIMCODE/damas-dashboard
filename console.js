@@ -16,6 +16,7 @@ require.config({
 		'ui_editor': 'generic-ui/scripts/uiComponents/ui_editor',
 		'ui_search': 'generic-ui/scripts/uiComponents/ui_search',
 		'rsync': 'rsync',
+		'servers': 'servers',
 		'domReady': '//cdn.rawgit.com/requirejs/domReady/2.0.1/domReady'
 	},
 	urlArgs: "v=" +  (new Date()).getTime()
@@ -111,7 +112,7 @@ process_hash = function() {
 
 
 
-define(['domReady', "damas", "utils", "rsync"], function (domReady, damas, rsync) {
+define(['domReady', "damas", "utils", "rsync", "servers"], function (domReady, damas, rsync, servers) {
 	//require(["./conf.json"]);
 	require(["ui_log", "ui_view"], function () {
 	require(["assetViewer"]);
@@ -194,191 +195,6 @@ window.show_log = show_log;
 
 
 
-		/**
-		 * Methods
-		 */
-		function show_servers(){
-
-
-						function html_cell(switche, title){
-							var c = document.createElement('span');
-							c.innerHTML = '&nbsp;';
-							c.setAttribute('title', title);
-							c.style.cursor = 'default';
-							if (switche) {
-								c.classList.add('synced');
-							}
-							else {
-								c.classList.add('cellError');
-							}
-							return c;
-
-						}
-
-
-			var out = document.querySelector('#contents');
-			damas.search('_id:/^sit\/.*/', function( serversids ){
-				//damas.read(conf.servers, function(servers){
-				damas.read(serversids, function(servers){
-				var table = document.createElement('table');
-				var thead = document.createElement('thead');
-				var th1 = document.createElement('th');
-				var th2 = document.createElement('th');
-				var th3 = document.createElement('th');
-				var th4 = document.createElement('th');
-				var th5 = document.createElement('th');
-				table.appendChild(thead);
-				thead.appendChild(th1);
-				thead.appendChild(th2);
-				thead.appendChild(th3);
-				thead.appendChild(th4);
-				thead.appendChild(th5);
-				table.classList.add('servers');
-				th1.classList.add('servername');
-				th1.innerHTML = 'server';
-				th2.innerHTML = 'emission';
-				th3.innerHTML = 'reception';
-				th4.innerHTML = 'scan';
-				th5.innerHTML = 'type';
-				th2.setAttribute('colspan','2');
-				th3.setAttribute('colspan','2');
-				th4.setAttribute('colspan','2');
-				//th5.innerHTML = 'duration';
-				out.innerHTML = '<h1>Servers</h1>';
-				out.appendChild(table);
-					for (var i=0; i<servers.length; i++) {
-						var tbody = document.createElement('tbody');
-						var tr = document.createElement('tr');
-						var td1 = document.createElement('td');
-						var td2 = document.createElement('td');
-						var td22 = document.createElement('td');
-						var td3 = document.createElement('td');
-						var td32 = document.createElement('td');
-						var td4 = document.createElement('td');
-						var td42 = document.createElement('td');
-						var td5 = document.createElement('td');
-						//var td5 = document.createElement('td');
-						table.appendChild(tbody);
-						tbody.appendChild(tr);
-						tr.appendChild(td1);
-						tr.appendChild(td2);
-						tr.appendChild(td22);
-						tr.appendChild(td3);
-						tr.appendChild(td32);
-						tr.appendChild(td4);
-						tr.appendChild(td42);
-						tr.appendChild(td5);
-						//tr.appendChild(td5);
-						td1.style.paddingRight="1ex";
-						td1.classList.add('username');
-						td1.style.whiteSpace="nowrap";
-						//tr.setAttribute('title', JSON_tooltip(servers[i]));
-						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
-						//if (servers[i].exit_emission == 0 && servers[i].exit_reception == 0) {
-						td5.innerHTML = (servers[i].caseinsensitive === true)? 'Windows':'';
-						/*
-						if (!servers[i].exit_emission & !servers[i].exit_reception & !servers[i].exit_scan) {
-							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
-						}
-						else {
-							td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
-						}
-						*/
-						td1.innerHTML += servers[i].name;
-
-						td2.appendChild(html_cell(!servers[i].exit_emission, human_time(new Date(servers[i].last_emission))));
-						//td2.innerHTML += " ";
-
-						td22.innerHTML = html_time(new Date(servers[i].last_emission)) + ' (';
-						var a = document.createElement('a');
-						a.href = '#search={"origin":"'+servers[i].name+'"}&sort=time';
-						a.innerHTML = 'files';
-						td22.appendChild(a);
-						td22.innerHTML += ')';
-						//td2.innerHTML += '<br/>';
-
-
-
-						td3.appendChild(html_cell(!servers[i].exit_reception, human_time(new Date(servers[i].last_reception))));
-						//td3.innerHTML += " ";
-						td32.innerHTML = html_time(new Date(servers[i].last_reception)) + ' (';
-						var a = document.createElement('a');
-						a.href = '#search={"_id":"REGEX_/","synced_'+servers[i].name+'":{"$exists":false},"origin":{"$ne":"'+servers[i].name+'"},"deleted":{"$ne":true},"sync_disabled":{"$ne":true}}';
-						a.innerHTML = 'files';
-						td32.appendChild(a);
-						td32.innerHTML += ')';
-
-						if (servers[i] === null) {
-							continue;
-						}
-
-						td4.appendChild(html_cell(!servers[i].exit_scan, human_time(new Date(servers[i].last_scan))));
-						//td4.innerHTML += " ";
-						var str = '<span style="white-space: nowrap">';
-						if (servers[i].last_scan){
-							str += html_time(new Date(servers[i].last_scan));
-							//str += ' ('+servers[i].exit_scan+')';
-						}
-						else {
-							//td4.innerHTML = '_';
-						}
-						if (servers[i].scan_duration){
-							str += ' (';
-							var minutes = Math.floor(servers[i].scan_duration/1000/60);
-							if (0<minutes){
-								str += minutes+'\'';
-							}
-							str += servers[i].scan_duration/1000 % 60+'\")';
-						}
-						str += '</span><br/>';
-						td42.innerHTML += str;
-						//else {
-							//td4.innerHTML = '_';
-						//}
-
-						(function (node){
-							if (require.specified('ui_editor')) {
-								td1.addEventListener('click', function(){
-									initEditor(node);
-								});
-							}
-						}(servers[i]));
-
-
-						var tr = document.createElement('tr');
-						var td1 = document.createElement('td');
-						var td2 = document.createElement('td');
-						tbody.appendChild(tr);
-						tr.appendChild(td1);
-						tr.appendChild(td2);
-						td2.setAttribute('colspan','7');
-						var errordiv = document.createElement('div');
-						errordiv.classList.add('errortext');
-						td2.appendChild(errordiv);
-						if (servers[i].stderr_emission){
-							errordiv.innerHTML += '<em>emission:</em>'+servers[i].stderr_emission+'<br/>';
-						}
-						if (servers[i].stderr_reception){
-							errordiv.innerHTML += '<em>reception:</em><br/>'+servers[i].stderr_reception+'<br/>';
-						}
-						if (servers[i].stderr_scan){
-							errordiv.innerHTML += '<br/><em>scan:</em><br/>'+servers[i].stderr_scan+'<br/>';
-						}
-						td2.innerHTML += '</div><br/>';
-					}
-			})});
-
-			/*
-			if (conf.syncKeys) {
-				for (let sync of conf.syncKeys) {
-					var str_title = sync.replace('synced_','')+'\n';
-					var h3 = document.createElement('h3');
-					h3.innerHTML = str_title;
-					out.appendChild(h3);
-				}
-			}
-			*/
-		}
 		function show_upqueues(){
 			damas.search_mongo({_id:'REGEX_/', synced_online:{$exists:false}}, {_id:1},0,0, function(assets){
 				alert(assets.count);
