@@ -91,21 +91,21 @@ function table() {
 	var thead = document.createElement('thead');
 	var th1 = document.createElement('th');
 	var th2 = document.createElement('th');
-	var th3 = document.createElement('th');
+	//var th3 = document.createElement('th');
 	var th4 = document.createElement('th');
 	table.classList.add('log');
 	th1.classList.add('time');
 	th2.classList.add('file');
-	th3.classList.add('size');
+	//th3.classList.add('size');
 	th4.classList.add('comment');
-	th1.innerHTML = 'time &xutri;';
+	th1.innerHTML = 'time &utrif;';
 	th2.innerHTML = 'file';
-	th3.innerHTML = 'size';
+	//th3.innerHTML = 'size';
 	th4.innerHTML = 'comment';
 	table.appendChild(thead);
 	thead.appendChild(th1);
 	thead.appendChild(th2);
-	thead.appendChild(th3);
+	//thead.appendChild(th3);
 	thead.appendChild(th4);
 	return table;
 }
@@ -139,15 +139,15 @@ function tablebody(container, nodes) {
 function tablerow(node, noclickontimebool) {
 	var tr = document.createElement('tr');
 	var td1 = document.createElement('td');
-	var td3 = document.createElement('td');
+	//var td3 = document.createElement('td');
 	var td4 = document.createElement('td');
 	var td2 = document.createElement('td');
-	var td5 = document.createElement('td');
+	//var td5 = document.createElement('td');
 	td1.classList.add('time');
 	td2.classList.add('file');
-	td3.classList.add('size');
+	//td3.classList.add('size');
 	td4.classList.add('comment');
-	td5.classList.add('buttons');
+	//td5.classList.add('buttons');
 	var time = new Date(parseInt(node.time));
 	td1.style.width = '18ex';
 	td1.innerHTML= html_time(new Date(parseInt(node.time)));
@@ -161,24 +161,26 @@ function tablerow(node, noclickontimebool) {
 			td2.innerHTML = human_filename_txt(file);
 		}
 	}
-	td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
+	//td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
 	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment.replace(/\n/g,'<br/>');
 	tr.appendChild(td1);
 	tr.appendChild(td2);
-	tr.appendChild(td3);
+	//tr.appendChild(td3);
 	tr.appendChild(td4);
-	tr.appendChild(td5);
-	var td5span0 = document.createElement('span');
-	var td5span1 = document.createElement('span');
-	td5span1.classList.add('delete');
-	td5span1.innerHTML = 'x';
-	td5.appendChild(td5span1);
+	//tr.appendChild(td5);
+	//var td5span0 = document.createElement('span');
+	//var td5span1 = document.createElement('span');
+	//td5span1.classList.add('delete');
+	//td5span1.innerHTML = 'x';
+	//td5.appendChild(td5span1);
+	/*
 	td5span1.addEventListener('click', function(e){
 		e.stopPropagation();
 		if (confirm('Delete '+node._id+' ?')) {
 			damas.delete(node._id);
 		}
 	});
+	*/
 	if (noclickontimebool!==true) {
 		td1.addEventListener('click', function(e){
 			//if (node['#parent']) {
@@ -198,9 +200,9 @@ function tablerow(node, noclickontimebool) {
 	}
 	tr.setAttribute('title', JSON_tooltip(node));
 	td1.setAttribute('title', time);
-	td3.setAttribute('title', node.file_size || node.bytes || node.size || node.source_size);
-	td5span0.setAttribute('title', 'edit');
-	td5span1.setAttribute('title', 'delete');
+	//td3.setAttribute('title', node.file_size || node.bytes || node.size || node.source_size);
+	//td5span0.setAttribute('title', 'edit');
+	//td5span1.setAttribute('title', 'delete');
 	return tr;
 }
 

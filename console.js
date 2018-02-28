@@ -123,9 +123,9 @@ define(['domReady', "damas", "utils", "rsync", "servers"], function (domReady, d
 	//require(["scripts/assetViewer/ui_overlay"]);
 	//require(["assetViewer"]);
 	window.damas = damas;
-	loadCss('console.css');
+	//loadCss('console.css');
 	//loadCss('console_design.css');
-	loadCss('console_mono.css');
+	//loadCss('console_mono.css');
 
 	// load conf
 	var xobj = new XMLHttpRequest();
@@ -143,9 +143,9 @@ define(['domReady', "damas", "utils", "rsync", "servers"], function (domReady, d
 			if (damas.user)
 			{
 				document.querySelector('.username').innerHTML = damas.user.username;
-				document.querySelector('#signOut').style.display = 'inline';
+				document.querySelector('#signOut').style.display = 'inline-block';
 				document.querySelector('#signIn').style.display = 'none';
-				document.querySelector('#authInfo').style.display = 'inline';
+				document.querySelector('#authInfo').style.display = 'inline-block';
 			}
 			//document.querySelector('#menubar2').style.display = 'block';
 			//show_log();
@@ -221,7 +221,7 @@ window.show_log = show_log;
 					th3.classList.add('userclass');
 					th4.classList.add('lastlogin');
 					th4.classList.add('time');
-					th1.innerHTML = 'username &xutri;';
+					th1.innerHTML = 'username &utrif;';
 					th2.innerHTML = 'email';
 					th3.innerHTML = 'class';
 					th4.innerHTML = 'last login';
