@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<meta charset="UTF-8"/>
+		<script data-main="console" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.js"></script>
+		<link type="text/css" rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+		<!--
+		<link type="text/css" rel="stylesheet" href="//cdn.jsdelivr.net/npm/picnic@6.4.0/releases/picnic.min.css"/>
+		-->
+		<link type="text/css" rel="stylesheet" href="console.css"/>
+		<link type="text/css" rel="stylesheet" href="console_mono.css"/>
+		<link type="text/css" rel="stylesheet" href="css/color.css"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+	</head>
+	<body>
+		<div id="layer0" class="flexlayer">
+			<div id="header" class="layerHeader">
+				<div id="layer0Menu" class="menubar">
+					<span id="authInfo">
+						<span class="nomobile">Connecté.e en tant que </span>
+						<span class="username"></span>
+					</span>
+					<a class="button" id="signIn" href="signIn">sign in</a>
+					<a class="button" id="signOut" class="clickable">sign out</a>
+					<a class="button" id="but_servers" href="#servers">servers</a>
+					<a class="button" id="but_log" href="#log">log</a>
+					<a class="button" id="but_files" href="#search=">files</a>
+					<!--
+					<a class="button" id="but_locks" href="#locks">locks</a>
+					-->
+					<a class="button" id="but_users" href="#users">users</a>
+					<a class="button" class="clickable" onclick="prompt_publish()">publish</a>
+				</div>
+			</div>
+			<div id="layer0Content" class="layerWrapper">
+				<div id="contents" class="layerContent"></div>
+				<div id="layer0SidePanel" class="layerPanel"></div>
+			</div>
+		</div>
+	</body>
+</html>
