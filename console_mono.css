@@ -14,7 +14,8 @@ body {
 }
 table td.file,
 table td.size,
-table td.sync
+table td.sync,
+table td.time
 {
 	/*
 	font-family: monospace;
@@ -31,7 +32,9 @@ input {
 }
 
 table th {
+/*
 	background: #0074d9;
+*/
 	color: #fff;
 	padding: .3em 2ex .3em 2ex;
 }
@@ -44,7 +47,9 @@ table th.sync {
 }
 
 a {
+/*
 	color: #0074d9;
+*/
 	text-decoration: none;
 	box-shadow: none;
 	transition: all .3s;
@@ -68,11 +73,15 @@ body * {
 	border: 1px solid black;
     text-decoration: none;
 	padding: 0 1ex;
+/*
 	color: black;
+*/
 
 	border: 0;
+/*
 	background: #0074d9;
 	color: #fff;
+*/
 	padding: .3em .9em;
 	border-radius: 0.2em;
 	margin: .3em 0;

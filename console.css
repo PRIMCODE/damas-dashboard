@@ -27,7 +27,9 @@ body, html {
 #layer0Menu {
 	position: fixed;
 	z-index: 100;
+/*
 	background-color: white;
+*/
 }
 /*
 #panelPrincipal {
@@ -119,7 +121,9 @@ body, html {
 	display: flex;
 	flex-direction: row;
 	flex-grow: 2;
+/*
 	background-color: rgba(255,255,255,1);
+*/
 }
 .layerWrapper > div {
     position: relative;

@@ -34,6 +34,7 @@ rsync.draw = function(){
 		div.appendChild(rsync.show_line(conf, 'ssh_public_key', 'text_multiline', '________'));
 	});
 
+/*
 	var h = document.createElement('h2');
 	h.innerHTML = 'Add Server';
 	out.appendChild(h);
@@ -90,6 +91,7 @@ rsync.draw = function(){
 	f.appendChild(document.createElement('br'));
 	f.appendChild(button);
 	out.appendChild(f);
+*/
 	rsync.show_rsync_servers();
 }
 
