@@ -1,64 +1,76 @@
-rsync = {};
+settings = {};
 
-rsync.draw = function(){
+settings.draw = function(){
 	var out = document.querySelector('#contents');
 	var h = document.createElement('h1');
-	h.innerHTML = 'Rsync';
+	h.innerHTML = 'Settings';
 	out.appendChild(h);
-	var h = document.createElement('h2');
-	h.innerHTML = 'Configuration';
-	out.appendChild(h);
-
-	var div = document.createElement('ul');
-	out.appendChild(div);
 
 	damas.read("rsyncGlobalParameters", function(conf){
 		if (null === conf) {
 			div.innerHTML = "rsync_config not found"
 		}
+		var h = document.createElement('h2');
+		h.innerHTML = 'Tracker';
+		out.appendChild(h);
 		if (require.specified('ui_editor')) {
 			h.addEventListener('click', function(){
 				initEditor(conf);
 			});
 		}
-		div.appendChild(rsync.show_line(conf, 'active', 'boolean', false));
-		div.appendChild(rsync.show_line(conf, 'email_reports', 'boolean', false));
-		div.appendChild(rsync.show_line(conf, 'rsync_limit_asset_ul', 'number', false));
-		div.appendChild(rsync.show_line(conf, 'rsync_limit_asset_dl', 'number', false));
-		div.appendChild(rsync.show_line(conf, 'rsync_excl', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'rsync_up', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'rsync_scan', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'rsync_dl', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'rsync_daemon_options', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'rsync_delete', 'text', ''));
-		div.appendChild(rsync.show_line(conf, 'ssh_public_key', 'text_multiline', '________'));
-		var h3 = document.createElement('h3');
-		h3.innerHTML= 'File discovery';
-		div.appendChild(h3);
-		//div.appendChild(rsync.show_line(conf, 'enableScans', 'boolean', false));
+		var div = document.createElement('ul');
+		out.appendChild(div);
+		let li;
+		//div.appendChild(settings.show_line(conf, 'active', 'boolean', false));
+		//div.appendChild(settings.show_line(conf, 'rsync_limit_asset_ul', 'number', false));
+		//div.appendChild(settings.show_line(conf, 'rsync_limit_asset_dl', 'number', false));
+		//div.appendChild(settings.show_line(conf, 'rsync_excl', 'text', ''));
+		//div.appendChild(settings.show_line(conf, 'rsync_up', 'text', ''));
+		//div.appendChild(settings.show_line(conf, 'rsync_scan', 'text', ''));
+		//div.appendChild(settings.show_line(conf, 'rsync_dl', 'text', ''));
+		//div.appendChild(settings.show_line(conf, 'rsync_daemon_options', 'text', ''));
+		//div.appendChild(settings.show_line(conf, 'rsync_delete', 'text', ''));
+		div.appendChild(li = settings.show_line(conf, 'rsaPublicKey', 'text_multiline', '________'));
+		var ta = li.querySelector('textarea');
+		ta.style.width = '100%';
+		ta.style.height = 'auto';
+		ta.style.height = (ta.scrollHeight+4)+'px';
+		div.appendChild(settings.show_line(conf, 'emailReports', 'boolean', false));
+
+		var h2 = document.createElement('h2');
+		h2.innerHTML= 'File discovery';
+		out.appendChild(h2);
+		var div_agents = document.createElement('div');
+		out.appendChild(div_agents);
+		var div = document.createElement('ul');
+		out.appendChild(div);
+
+		//div.appendChild(settings.show_line(conf, 'enableScans', 'boolean', false));
 		//damas.read( damas.search_mongo({_id:"REGEX_^sit\/"}).ids, function(servers){
 		damas.search_mongo({_id:"REGEX_^sit\/"},{},0,0, function(serverIds){
 			damas.read(serverIds.ids, function(servers){
 				for (var i=0; i<servers.length; i++) {
-					//rsync.show_server(servers[i], out);
-					div.appendChild(rsync.show_key(servers[i], 'asset_scan', 'boolean', false, servers[i].name));
+					//settings.show_server(servers[i], out);
+					div.appendChild(settings.show_key(servers[i], 'asset_scan', 'boolean', false, servers[i].name));
 				}
 			});
 		});
-		let li;
-		div.appendChild(li = rsync.show_line(conf, 'includePatternRules', 'text_multiline', '________'));
+		div.appendChild(li = settings.show_line(conf, 'includePatternRules', 'text_multiline', '________'));
 		var ta = li.querySelector('textarea');
 		ta.style.width = '100%';
 		ta.style.height = 'auto';
 		ta.style.height = (ta.scrollHeight+4)+'px';
-		div.appendChild(li = rsync.show_line(conf, 'excludePatternRules', 'text_multiline', '________'));
+		div.appendChild(li = settings.show_line(conf, 'excludePatternRules', 'text_multiline', '________'));
 		var ta = li.querySelector('textarea');
 		ta.style.width = '100%';
 		ta.style.height = 'auto';
 		ta.style.height = (ta.scrollHeight+4)+'px';
-		//div.appendChild(rsync.show_line(conf, 'scanArguments', 'text', '___'));
-		div.appendChild(rsync.show_line(conf, 'ignoreExistingFiles', 'boolean', false));
-		div.appendChild(rsync.show_line(conf, 'sleepBetweenScans', 'number', false));
+		//div.appendChild(settings.show_line(conf, 'scanArguments', 'text', '___'));
+		div.appendChild(settings.show_line(conf, 'ignoreExistingFiles', 'boolean', false));
+		div.appendChild(settings.show_line(conf, 'sleepBetweenScans', 'number', false));
+
+
+		settings.show_rsync_servers();
 	});
 
 /*
@@ -119,20 +131,19 @@ rsync.draw = function(){
 	f.appendChild(button);
 	out.appendChild(f);
 */
-	rsync.show_rsync_servers();
 }
 
 //
 // main
 //
-rsync.show_rsync_servers = function(){
+settings.show_rsync_servers = function(){
 	var out = document.querySelector('#contents');
 	var h = document.createElement('h2');
-	h.innerHTML = 'Servers';
+	h.innerHTML = 'Agents';
 	out.appendChild(h);
 	damas.read( damas.search_mongo({_id:"REGEX_^sit\/"}).ids, function(servers){
 		for (var i=0; i<servers.length; i++) {
-			rsync.show_server(servers[i], out);
+			settings.show_server(servers[i], out);
 		}
 	});
 }
@@ -140,7 +151,7 @@ rsync.show_rsync_servers = function(){
 //
 // editable server
 //
-rsync.show_server = function(server, out) {
+settings.show_server = function(server, out) {
 	var h4 = document.createElement('h3');
 	h4.innerHTML = server.name;
 	out.appendChild(h4);
@@ -151,20 +162,20 @@ rsync.show_server = function(server, out) {
 			initEditor(server);
 		});
 	}
-	div.appendChild(rsync.show_line(server, 'name', 'text', ''));
-	div.appendChild(rsync.show_line(server, 'active', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'email', 'text', false));
-	div.appendChild(rsync.show_line(server, 'asset_emission', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'asset_reception', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'asset_scan', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'asset_delete', 'boolean', false));
-	div.appendChild(rsync.show_line(server, 'url', 'text', ''));
-	div.appendChild(rsync.show_line(server, 'rsync_args', 'text', ''));
-	div.appendChild(rsync.show_line(server, 'rsync_env', 'text', '________'));
+	//div.appendChild(settings.show_line(server, 'name', 'text', ''));
+	//div.appendChild(settings.show_line(server, 'active', 'boolean', false));
+	//div.appendChild(settings.show_line(server, 'email', 'text', false));
+	div.appendChild(settings.show_line(server, 'emission', 'boolean', false));
+	div.appendChild(settings.show_line(server, 'reception', 'boolean', false));
+	//div.appendChild(settings.show_line(server, 'asset_scan', 'boolean', false));
+	//div.appendChild(settings.show_line(server, 'asset_delete', 'boolean', false));
+	div.appendChild(settings.show_line(server, 'url', 'text', ''));
+	div.appendChild(settings.show_line(server, 'rsync_args', 'text', '_'));
+	div.appendChild(settings.show_line(server, 'rsync_env', 'text', '_'));
 	return div;
 }
 
-rsync.show_value = function(server, keyname, defaultType, defaultValue)
+settings.show_value = function(server, keyname, defaultType, defaultValue)
 {
 	var input;
 	if (defaultType === "boolean" ) {
@@ -185,10 +196,10 @@ rsync.show_value = function(server, keyname, defaultType, defaultValue)
 	return input;
 }
 
-rsync.show_key = function(server, keyname, defaultType, defaultValue, title)
+settings.show_key = function(server, keyname, defaultType, defaultValue, title)
 {
 	var w = document.createElement('span');
-	var value = rsync.show_value(server, keyname, defaultType, defaultValue);
+	var value = settings.show_value(server, keyname, defaultType, defaultValue);
 	var span = document.createElement('span');
 	span.innerHTML = title || keyname;
 	w.appendChild(value);
@@ -199,7 +210,7 @@ rsync.show_key = function(server, keyname, defaultType, defaultValue, title)
 //
 // editable key line
 //
-rsync.show_line = function(server, keyname, defaultType, defaultValue, title)
+settings.show_line = function(server, keyname, defaultType, defaultValue, title)
 {
 	var li = document.createElement('li');
 	if (defaultType === "boolean" ) {

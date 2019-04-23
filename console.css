@@ -65,6 +65,9 @@ body, html {
 	text-align: right;
 	padding: 1ex 0;
 }
+.menubar i {
+	line-height: 1.5em;
+}
 #contents {
 	text-align: left;
 }

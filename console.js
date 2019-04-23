@@ -16,6 +16,7 @@ require.config({
 		'ui_editor': 'generic-ui/scripts/uiComponents/ui_editor',
 		'ui_search': 'generic-ui/scripts/uiComponents/ui_search',
 		'rsync': 'rsync',
+		'settings': 'settings',
 		'servers': 'servers',
 		'domReady': '//cdn.rawgit.com/requirejs/domReady/2.0.1/domReady'
 	},
@@ -102,6 +103,10 @@ process_hash = function() {
 		document.querySelector('#contents').innerHTML = '';
 		rsync.draw();
 	}
+	if (/#settings/.test(location.hash)) {
+		document.querySelector('#contents').innerHTML = '';
+		settings.draw();
+	}
 	if (/#log/.test(location.hash) || location.hash === '' ) {
 		document.querySelector('#but_log').classList.add('selected');
 		show_log();
@@ -112,7 +117,7 @@ process_hash = function() {
 
 
 
-define(['domReady', "damas", "utils", "rsync", "servers"], function (domReady, damas, rsync, servers) {
+define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function (domReady, damas, rsync, servers) {
 	//require(["./conf.json"]);
 	require(["ui_log", "ui_view"], function () {
 	require(["assetViewer"]);

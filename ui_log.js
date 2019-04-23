@@ -41,7 +41,7 @@ window.addEventListener('scroll', function(){
 });
 */
 function show_next(){
-	damas.search_mongo({'time': {$exists:true}, '#parent':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
+	damas.search_mongo({'time': {$exists:true}, 'comment':{$exists:true}}, {"time":-1},nbElements,offsetElements, function(res){
 		damas.read(res.ids, function(nodes){
 			retrieved_nodes = retrieved_nodes.concat(nodes);
 			tablebody(tableelem, nodes);
@@ -95,13 +95,13 @@ function table() {
 	var th4 = document.createElement('th');
 	table.classList.add('log');
 	th1.classList.add('time');
-	th2.classList.add('file');
+	th4.classList.add('file');
 	//th3.classList.add('size');
-	th4.classList.add('comment');
+	th2.classList.add('comment');
 	th1.innerHTML = 'time &utrif;';
-	th2.innerHTML = 'file';
+	th4.innerHTML = 'file';
 	//th3.innerHTML = 'size';
-	th4.innerHTML = 'comment';
+	th2.innerHTML = 'comment';
 	table.appendChild(thead);
 	thead.appendChild(th1);
 	thead.appendChild(th2);
@@ -144,9 +144,9 @@ function tablerow(node, noclickontimebool) {
 	var td2 = document.createElement('td');
 	//var td5 = document.createElement('td');
 	td1.classList.add('time');
-	td2.classList.add('file');
+	td4.classList.add('file');
 	//td3.classList.add('size');
-	td4.classList.add('comment');
+	td2.classList.add('comment');
 	//td5.classList.add('buttons');
 	var time = new Date(parseInt(node.time));
 	td1.style.width = '18ex';
@@ -164,9 +164,9 @@ function tablerow(node, noclickontimebool) {
 	//td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
 	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment.replace(/\n/g,'<br/>');
 	tr.appendChild(td1);
-	tr.appendChild(td2);
 	//tr.appendChild(td3);
 	tr.appendChild(td4);
+	tr.appendChild(td2);
 	//tr.appendChild(td5);
 	//var td5span0 = document.createElement('span');
 	//var td5span1 = document.createElement('span');
