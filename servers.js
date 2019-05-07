@@ -253,7 +253,7 @@
 
 
 	function prompt_publish (){
-			var file = prompt('Publish file (eg: /wf/sc/sc0027/sc0027-sh0020/ren/wf_sc0027-sh0020_ren_12/Stb/ )', '/wf/sc/');
+			var file = prompt('Publish file\n- publish a file using its exact path in the project\n- publish one directory and its content using a trailing slash \n(eg: /wf/sc/sc0027/sc0027-sh0020/ren/wf_sc0027-sh0020_ren_12/Stb/ )  ', '/wf/sc/');
 			if (null !== file) {
 				var origin = prompt('Origin', 'onyx');
 				if (null !== origin) {
@@ -265,13 +265,15 @@
 							online: '1',
 							comment: comment
 						}, function(n1){
+							/*
 							damas.create({
 								'#parent': file,
 								origin: origin,
 								comment: comment
 							}, function(n1){
-								alert('publish done!');
 								});
+							*/
+							alert('publish done!');
 						});
 					}
 				}

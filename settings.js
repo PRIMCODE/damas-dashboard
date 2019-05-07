@@ -40,10 +40,10 @@ settings.draw = function(){
 		var h2 = document.createElement('h2');
 		h2.innerHTML= 'File discovery';
 		out.appendChild(h2);
-		var div_agents = document.createElement('div');
-		out.appendChild(div_agents);
 		var div = document.createElement('ul');
 		out.appendChild(div);
+		var div_agents = document.createElement('li');
+		div.appendChild(div_agents);
 
 		//div.appendChild(settings.show_line(conf, 'enableScans', 'boolean', false));
 		//damas.read( damas.search_mongo({_id:"REGEX_^sit\/"}).ids, function(servers){
@@ -51,7 +51,7 @@ settings.draw = function(){
 			damas.read(serverIds.ids, function(servers){
 				for (var i=0; i<servers.length; i++) {
 					//settings.show_server(servers[i], out);
-					div.appendChild(settings.show_key(servers[i], 'asset_scan', 'boolean', false, servers[i].name));
+					div_agents.appendChild(settings.show_key(servers[i], 'enableDiscovery', 'boolean', false, servers[i].name));
 				}
 			});
 		});

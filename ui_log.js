@@ -144,9 +144,9 @@ function tablerow(node, noclickontimebool) {
 	var td2 = document.createElement('td');
 	//var td5 = document.createElement('td');
 	td1.classList.add('time');
-	td4.classList.add('file');
+	td4.classList.add('comment');
 	//td3.classList.add('size');
-	td2.classList.add('comment');
+	td2.classList.add('file');
 	//td5.classList.add('buttons');
 	var time = new Date(parseInt(node.time));
 	td1.style.width = '18ex';
