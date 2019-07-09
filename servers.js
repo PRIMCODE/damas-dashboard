@@ -3,14 +3,14 @@
 
 		function html_cell(switche, title){
 			var c = document.createElement('span');
-			c.innerHTML = '&nbsp;';
+			c.innerHTML = '&nbsp;&nbsp;';
 			c.setAttribute('title', title);
 			c.style.cursor = 'default';
 			if (switche) {
 				c.classList.add('synced');
 			}
 			else {
-				c.classList.add('cellError');
+				c.classList.add('sync_error');
 			}
 			return c;
 
@@ -21,6 +21,116 @@
 			damas.search('_id:/^sit\/.*/', function( serversids ){
 				//damas.read(conf.servers, function(servers){
 				damas.read(serversids, function(servers){
+
+					var test = document.createElement('div');
+					test.innerHTML = 'ewrwer';
+					test.addEventListener('click', function(){
+						alert('qwewqe');
+					});
+					//out.appendChild(test);
+				out.innerHTML += '<h1>Servers</h1>';
+				for (var i=0; i<servers.length; i++) {
+					var h2 = document.createElement('h2');
+					h2.innerHTML = servers[i].name;
+					out.appendChild(h2);
+					(function (node){
+						if (require.specified('ui_editor')) {
+							h2.addEventListener('click', function(){
+								initEditor(node);
+							});
+						}
+					}(servers[i]));
+					var h3 = document.createElement('h3');
+					h3.appendChild(html_cell(!servers[i].exit_emission, human_time(new Date(servers[i].last_emission))));
+					h3.innerHTML += " Emission";
+					out.appendChild(h3);
+					if (servers[i].stderr_emission){
+						let errordiv = document.createElement('div');
+						errordiv.classList.add('errortext');
+						out.appendChild(errordiv);
+						errordiv.innerHTML += servers[i].stderr_emission;
+					}
+					var div = document.createElement('div');
+					out.appendChild(div);
+					var span = document.createElement('span');
+					span.setAttribute('class','time');
+					span.innerHTML = html_time(new Date(servers[i].last_emission));
+					div.appendChild(span);
+					div.innerHTML += ' ';
+					var a = document.createElement('a');
+					a.setAttribute('title','emitted files');
+					a.href = '#search={"origin":"'+servers[i].name+'","synced_storage":{"$exists":true}}&sort=synced_storage&order=-1';
+					a.innerHTML = 'emmitted';
+					div.appendChild(a);
+					div.innerHTML += ' ';
+					var a = document.createElement('a');
+					a.href = '#search={"origin":"'+servers[i].name+'","synced_storage":{"$exists":false},"_id":"REGEX_/"}&sort=time';
+					a.innerHTML = 'queued';
+					div.appendChild(a);
+
+					var h3 = document.createElement('h3');
+					h3.appendChild(html_cell(!servers[i].exit_reception, human_time(new Date(servers[i].last_reception))));
+					h3.innerHTML += " Reception";
+					out.appendChild(h3);
+					if (servers[i].stderr_reception){
+						let errordiv = document.createElement('div');
+						errordiv.classList.add('errortext');
+						out.appendChild(errordiv);
+						errordiv.innerHTML += servers[i].stderr_reception;
+					}
+					var div = document.createElement('div');
+					out.appendChild(div);
+					div.innerHTML += '<span class="time">' + html_time(new Date(servers[i].last_reception))+'</span> ';
+					var a = document.createElement('a');
+					a.setAttribute('title','received files');
+					a.href = '#search={"synced_'+servers[i].name+'":{"$exists":true},"origin":{"$ne":"'+servers[i].name+'"}}&sort=synced_'+servers[i].name;
+					a.innerHTML = 'received';
+					div.appendChild(a);
+					div.innerHTML += ' ';
+					var a = document.createElement('a');
+					a.href = '#search={"synced_'+servers[i].name+'":{"$exists":false},"origin":{"$ne":"'+servers[i].name+'"},"deleted":{"$ne":true},"sync_disabled":{"$ne":true},"_id":"REGEX_^/" }';
+					a.innerHTML = 'queued';
+					div.appendChild(a);
+
+					var h3 = document.createElement('h3');
+					h3.appendChild(html_cell(!servers[i].exit_scan, human_time(new Date(servers[i].last_scan))));
+					h3.innerHTML += " Scan";
+					out.appendChild(h3);
+					if (servers[i].stderr_scan){
+						let errordiv = document.createElement('div');
+						errordiv.classList.add('errortext');
+						out.appendChild(errordiv);
+						errordiv.innerHTML += servers[i].stderr_scan;
+					}
+					var div = document.createElement('div');
+					out.appendChild(div);
+					if (servers[i].last_scan){
+						div.innerHTML += '<span class="time">' + html_time(new Date(servers[i].last_scan)) + '</span> ';
+					}
+					var str = '';
+					if (servers[i].scan_duration){
+						str += ' (';
+						var minutes = Math.floor(servers[i].scan_duration/60);
+						if (0<minutes){
+							str += minutes+'\'';
+						}
+						str += servers[i].scan_duration % 60+'\")';
+					}
+					div.innerHTML += str;
+
+						/*
+					(function (node){
+						if (require.specified('ui_editor')) {
+							h2.addEventListener('click', function(){
+								alert('qwewqe');
+								initEditor(node);
+							});
+						}
+					}(servers[i]));
+					*/
+				}
+
+/*
 				var table = document.createElement('table');
 				var thead = document.createElement('thead');
 				var th1 = document.createElement('th');
@@ -46,7 +156,6 @@
 				//th3.setAttribute('colspan','2');
 				//th4.setAttribute('colspan','2');
 				//th5.innerHTML = 'duration';
-				out.innerHTML = '<h1>Servers</h1>';
 				out.appendChild(table);
 					for (var i=0; i<servers.length; i++) {
 						var tbody = document.createElement('tbody');
@@ -103,14 +212,12 @@
 						//if (servers[i].rsync_exit == 0 || servers[i].rsync_exit === undefined) {
 						//if (servers[i].exit_emission == 0 && servers[i].exit_reception == 0) {
 						tr1td5.innerHTML = (servers[i].caseinsensitive === true)? 'Windows':'';
-						/*
-						if (!servers[i].exit_emission & !servers[i].exit_reception & !servers[i].exit_scan) {
-							td1.innerHTML = '<span class="synced">&nbsp;</span> ';
-						}
-						else {
-							td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
-						}
-						*/
+						//if (!servers[i].exit_emission & !servers[i].exit_reception & !servers[i].exit_scan) {
+							//td1.innerHTML = '<span class="synced">&nbsp;</span> ';
+						//}
+						//else {
+							//td1.innerHTML = '<span class="cellError">&nbsp;</span> ';
+						//}
 
 						var do_chk = function ( value, active, cb ) {
 							var c = document.createElement('input');
@@ -151,13 +258,13 @@
 							tr1td3.innerHTML += " ";
 							var a = document.createElement('a');
 							a.setAttribute('title','emitted files');
-							a.href = '#search={"origin":"'+servers[i].name+'","synced_online":{"$exists":true}}&sort=synced_online&order=-1';
+							a.href = '#search={"origin":"'+servers[i].name+'","synced_storage":{"$exists":true}}&sort=synced_storage&order=-1';
 							a.innerHTML = html_time(new Date(servers[i].last_emission));
 							tr1td3.appendChild(a);
 						}
 
 						var a = document.createElement('a');
-						a.href = '#search={"origin":"'+servers[i].name+'","synced_online":{"$exists":false},"_id":"REGEX_/"}&sort=time';
+						a.href = '#search={"origin":"'+servers[i].name+'","synced_storage":{"$exists":false},"_id":"REGEX_/"}&sort=time';
 						a.innerHTML = 'emission';
 						tr1td4.appendChild(a);
 
@@ -197,11 +304,11 @@
 							}
 							if (servers[i].scan_duration){
 								str += ' (';
-								var minutes = Math.floor(servers[i].scan_duration/1000/60);
+								var minutes = Math.floor(servers[i].scan_duration/60);
 								if (0<minutes){
 									str += minutes+'\'';
 								}
-								str += servers[i].scan_duration/1000 % 60+'\")';
+								str += servers[i].scan_duration % 60+'\")';
 							}
 							str += '</span><br/>';
 							tr3td3.innerHTML += str;
@@ -235,6 +342,7 @@
 							tr4td1.innerHTML += '</div><br/>';
 						}
 					}
+			*/
 			})});
 
 			/*
@@ -259,12 +367,14 @@
 				if (null !== origin) {
 					var comment = prompt('Message', 'published from web');
 					if (null !== comment) {
-						damas.create({
+						damas.upsert({
 							'_id': file,
 							origin: origin,
 							online: '1',
 							comment: comment
 						}, function(n1){
+							n1['synced_'+origin] = n1.time;
+							damas.update(n1);
 							/*
 							damas.create({
 								'#parent': file,

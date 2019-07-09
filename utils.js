@@ -139,6 +139,16 @@ human_filename_href = function ( file )
 }
 
 
+	showTimeline = function ( file ) {
+		var m = conf.syncKeys.map(function(sk){return sk.replace('synced_','modified_');});
+		var keys = conf.syncKeys.concat( ['time', 'file_mtime'] );
+		var keys2 = m.concat(keys);
+		console.log(keys);
+		console.log(keys2);
+		//var keysSorted = Object.keys(file).sort(function(a,b){return file[a],file[b]});
+
+	}
+
 }));
 
 

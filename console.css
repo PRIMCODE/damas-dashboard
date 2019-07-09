@@ -86,7 +86,6 @@ body, html {
 	vertical-align: bottom;
 }
 #contents table td {
-	vertical-align: top;
 	overflow: hidden;
 }
 .nomobile {
@@ -170,6 +169,9 @@ body, html {
 table.search th {
 	cursor: pointer;
 }
+table.log td.comment {
+	vertical-align: top;
+}
 
 table.log tr.history td,
 table.search tr.history td
@@ -190,10 +192,6 @@ table.search td.time {
 }
 table.log td.time {
 	padding-right: 1ex;
-}
-table.log    td.file,
-table.search td.file {
-	white-space: nowrap;
 }
 table td.file a {
 	text-decoration: none;

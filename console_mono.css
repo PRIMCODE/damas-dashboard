@@ -14,14 +14,16 @@ body {
 }
 table td.file,
 table td.size,
+table td.time,
 table td.sync,
-table td.time
+.time
 {
 	/*
 	font-family: monospace;
     font-family: "Share-TechMono", monospace;
 	*/
-    font-family: "Liberation Mono", monospace;
+	font-family: "Liberation Mono", monospace;
+	font-size: 10pt;
 }
 
 input {

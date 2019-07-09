@@ -165,8 +165,8 @@ settings.show_server = function(server, out) {
 	//div.appendChild(settings.show_line(server, 'name', 'text', ''));
 	//div.appendChild(settings.show_line(server, 'active', 'boolean', false));
 	//div.appendChild(settings.show_line(server, 'email', 'text', false));
-	div.appendChild(settings.show_line(server, 'emission', 'boolean', false));
-	div.appendChild(settings.show_line(server, 'reception', 'boolean', false));
+	div.appendChild(settings.show_line(server, 'enableEmission', 'boolean', false));
+	div.appendChild(settings.show_line(server, 'enableReception', 'boolean', false));
 	//div.appendChild(settings.show_line(server, 'asset_scan', 'boolean', false));
 	//div.appendChild(settings.show_line(server, 'asset_delete', 'boolean', false));
 	div.appendChild(settings.show_line(server, 'url', 'text', ''));
@@ -201,6 +201,7 @@ settings.show_key = function(server, keyname, defaultType, defaultValue, title)
 	var w = document.createElement('span');
 	var value = settings.show_value(server, keyname, defaultType, defaultValue);
 	var span = document.createElement('span');
+	span.classList.add('checkable');
 	span.innerHTML = title || keyname;
 	w.appendChild(value);
 	w.appendChild(span);

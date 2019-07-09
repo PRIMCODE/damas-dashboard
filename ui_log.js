@@ -153,6 +153,8 @@ function tablerow(node, noclickontimebool) {
 	td1.innerHTML= html_time(new Date(parseInt(node.time)));
 	var file = node.file || node['#parent'] || node._id;
 	if (file) {
+		td2.appendChild(human_filename_href(file));
+		/*
 		// here we want to know if we are in the zombillenium case or in the white fang case
 		if ( (node['#parent'] && !node.file) || ( node.synced_online && node.synced_online > node.time )) {
 			td2.appendChild(human_filename_href(file));
@@ -160,6 +162,7 @@ function tablerow(node, noclickontimebool) {
 		else {
 			td2.innerHTML = human_filename_txt(file);
 		}
+		*/
 	}
 	//td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
 	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment.replace(/\n/g,'<br/>');
