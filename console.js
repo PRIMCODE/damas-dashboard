@@ -139,7 +139,7 @@ define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function 
 	xobj.send(null);
 	conf = JSON.parse(xobj.responseText);
 
-	damas_connect('/api/', function (res) {
+	damas_connect('', function (res) {
 		if (!res) {
 			//window.location='/signIn?back=console';
 			window.location='/signIn';
