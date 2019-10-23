@@ -123,6 +123,9 @@ function tablebody(container, nodes) {
 			var trow = tablerow(nodes[i]);
 			trow.querySelector('td.comment').remove();
 			tbody.firstChild.querySelector('td.comment').rowSpan += 1;
+			if (nodes[i].time === nodes[i-1].time) {
+				trow.querySelector('td.time').innerHTML= '';
+			}
 			tbody.appendChild(trow);
 		}
 		else {
