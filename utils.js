@@ -118,11 +118,14 @@ human_filename_href = function ( file )
 {
 	// we want a real link to the file while firing the viewer when clicked
 	var a = document.createElement('a');
-	a.setAttribute('href', '/api/file'+file);
+	//a.setAttribute('href', '/api/file'+file);
+	a.setAttribute('href', '/view'+file);
+	/*
 	a.addEventListener('click', function(e){
 		e.preventDefault()
 		window.location.hash = '#view='+file;
 	});
+	*/
 	var path = document.createElement('span');
 	path.className = 'nomobile';
 	a.appendChild(path);
