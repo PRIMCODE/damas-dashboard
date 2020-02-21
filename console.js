@@ -115,6 +115,23 @@ process_hash = function() {
 	//window.previousHash.push(location.hash);
 };
 
+notification_icon = function() {
+	damas.search_mongo({_id:'REGEX_^sit.*'}, {}, 0 , 0 , function( res ){
+					damas.read(res.ids, function(volumes){
+					console.log('volume.error='+volume.error);
+						for (var i=0; i<volumes.length; i++){
+										var volume = volumes[i];
+							if (volume.error === undefined ) {
+								continue;
+							}
+							if (volume.error !== 0) {
+								document.querySelector('#errorNotif').style.display = 'inline';
+							}
+						}
+					});
+					//alert(JSON.stringify(res));
+	});
+};
 
 
 define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function (domReady, damas, rsync, servers) {
@@ -155,6 +172,7 @@ define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function 
 			//document.querySelector('#menubar2').style.display = 'block';
 			//show_log();
 			process_hash();
+			notification_icon();
 			//window.previousHash = '';
 		}
 		else
