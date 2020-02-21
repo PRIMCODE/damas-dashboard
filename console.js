@@ -119,8 +119,8 @@ notification_icon = function() {
 	damas.search_mongo({_id:'REGEX_^sit.*'}, {}, 0 , 0 , function( res ){
 					damas.read(res.ids, function(volumes){
 						for (var i=0; i<volumes.length; i++){
-										console.log('volume.error='+volume.error);
 										var volume = volumes[i];
+										console.log('volume.error='+volume.error);
 							if (volume.error === undefined ) {
 								continue;
 							}
