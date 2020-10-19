@@ -167,6 +167,7 @@ function tablerow(node, noclickontimebool) {
 		}
 		*/
 	}
+	td2.setAttribute('style', node.style);
 	//td3.innerHTML = human_size( node.file_size || node.bytes || node.size || node.source_size);
 	td4.innerHTML = '&lt;'+node.author+'&gt; '+node.comment.replace(/\n/g,'<br/>');
 	tr.appendChild(td1);
