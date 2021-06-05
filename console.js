@@ -6,13 +6,13 @@ require.config({
 		location: 'scripts/assetViewer',
 		main: 'ui_overlay'
 	}],
+		'ui_upload': 'generic-ui/scripts/uiComponents/ui_upload',
 */
 	paths: {
 		'damas': "/js/damas",
 		'utils': "utils",
 		'ui_log': "ui_log",
 		'ui_view': "ui_view",
-		'ui_upload': 'generic-ui/scripts/uiComponents/ui_upload',
 		'ui_editor': 'generic-ui/scripts/uiComponents/ui_editor',
 		'ui_search': 'generic-ui/scripts/uiComponents/ui_search',
 		'rsync': 'rsync',
@@ -155,6 +155,22 @@ define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function 
 	xobj.open('GET', 'conf.json', false);
 	xobj.send(null);
 	conf = JSON.parse(xobj.responseText);
+	window.conf = conf;
+
+
+
+
+		var a4 = document.querySelector('#but_inprogress');
+		//a4.innerHTML = 'in_progress';
+		var query_array = [];
+		for (var sync of conf.syncKeys) {
+			var name = sync.replace('synced_','');
+			query_array.push('{"syncing_'+name+'":{"$exists":true}}');
+		}
+		a4.href = '#search={"$or": [' + query_array.join(',') + ']}';
+
+
+
 
 	damas_connect('', function (res) {
 		if (!res) {
@@ -164,7 +180,7 @@ define(['domReady', "damas", "utils", "rsync", "settings", "servers"], function 
 		if (res){
 			if (damas.user)
 			{
-				document.querySelector('.username').innerHTML = damas.user.username;
+				//document.querySelector('.username').innerHTML = damas.user.username;
 				document.querySelector('#signOut').style.display = 'inline-block';
 				document.querySelector('#signIn').style.display = 'none';
 				document.querySelector('#authInfo').style.display = 'inline-block';
